@@ -10,11 +10,13 @@
 # same way; nothing pins the two in step any more. The fallback hash is only
 # reached offline; GIT_TERMINAL_PROMPT/timeout stop a dead remote from hanging
 # every make run. Override with `make MABUR_VERSION=<sha-or-tag> mabur-rebuild`.
+MABUR_GIT_REMOTE ?= https://github.com/notsudogood/mabur.git
+MABUR_GIT_BRANCH ?= claude/loving-cori-33yjcg
 MABUR_MASTER_SHA := $(shell GIT_TERMINAL_PROMPT=0 timeout 15 \
-	git ls-remote https://github.com/gilankpam/mabur.git \
-	refs/heads/master 2>/dev/null | cut -f1)
-MABUR_VERSION = $(or $(MABUR_MASTER_SHA),5790043765a30dc060822c0f8685b804e60fa402)
-MABUR_SITE = https://github.com/gilankpam/mabur.git
+	git ls-remote $(MABUR_GIT_REMOTE) \
+	refs/heads/$(MABUR_GIT_BRANCH) 2>/dev/null | cut -f1)
+MABUR_VERSION = $(or $(MABUR_MASTER_SHA),6cd87245b6afc028a07043ffef519d842cbc7e71)
+MABUR_SITE = $(MABUR_GIT_REMOTE)
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
 MABUR_INSTALL_TARGET = YES
