@@ -12,6 +12,13 @@ on:
       - master
   workflow_dispatch:
 
+# The release jobs create/update GitHub releases, which needs the token's
+# contents: write. Declared explicitly: a fork's default workflow token is
+# read-only (openipc-builder's same-branch run died on "403 Resource not
+# accessible by integration" at its release step).
+permissions:
+  contents: write
+
 env:
   TAG_NAME: latest
 
