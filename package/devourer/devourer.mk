@@ -4,13 +4,11 @@
 #
 ################################################################################
 
-# gilankpam/devourer master, resolved to a hash on every make invocation -- see
-# the note in package/mabur/mabur.mk, which tracks its master the same way.
+# Feedback-repair data-gathering build: PINNED to the gilankpam/devourer master
+# commit the 2026-09-27 buildroot-snapshot image was built against, and to the
+# same commit as the air-unit firmware from openipc-builder's same-named branch.
 # Override with `make DEVOURER_VERSION=<sha-or-tag> mabur-rebuild`.
-DEVOURER_MASTER_SHA := $(shell GIT_TERMINAL_PROMPT=0 timeout 15 \
-	git ls-remote https://github.com/gilankpam/devourer.git \
-	refs/heads/master 2>/dev/null | cut -f1)
-DEVOURER_VERSION = $(or $(DEVOURER_MASTER_SHA),3b15c7ae8dc0fe3608ed42a95750a1b4eb605704)
+DEVOURER_VERSION = 56eabe4ae32f03992deeee8d0b666a7ce81fc81f
 DEVOURER_SITE = https://github.com/gilankpam/devourer.git
 DEVOURER_SITE_METHOD = git
 DEVOURER_LICENSE = GPL-2.0

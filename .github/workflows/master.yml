@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - master
+      # feedback-repair data-gathering build (release job at the bottom)
+      - claude/wifi-fpv-link-architecture-1bms9l
     tags:
       - 'v*'
   pull_request:
@@ -128,6 +130,38 @@ jobs:
           tag_name: buildroot-snapshot
           body: |
             Snapshot development build from master branch
+            Commit: ${{ github.sha }}
+          files: artifacts/**/*
+          prerelease: true
+          overwrite: true
+
+  # Feedback-repair data-gathering branch: publish its images the way master
+  # does, under a fixed tag, so they outlive the 7-day artifact retention and
+  # download without a GitHub login. Pairs with openipc-builder's
+  # feedback-repair-shadow release (same mabur + devourer commits).
+  release-feedback-repair:
+    name: Release feedback-repair-shadow (on its branch)
+    runs-on: ubuntu-latest
+    needs: [buildroot]
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/claude/wifi-fpv-link-architecture-1bms9l'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v8
+        with:
+          path: artifacts/
+
+      - name: Create/Update feedback-repair-shadow Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: feedback-repair-shadow
+          body: |
+            Feedback-repair phase-1 data-gathering GS image (mabur arq.log,
+            debug logging on by default). Pair with the air-unit firmware from
+            notsudogood/openipc-builder's feedback-repair-shadow release.
             Commit: ${{ github.sha }}
           files: artifacts/**/*
           prerelease: true

@@ -4,17 +4,16 @@
 #
 ################################################################################
 
-# gilankpam/mabur master, resolved to a hash on every make invocation. Feeding
-# the downloader the hash rather than `master` keeps one dl/ tarball per commit,
-# so new commits actually refetch. package/devourer tracks its own master the
-# same way; nothing pins the two in step any more. The fallback hash is only
-# reached offline; GIT_TERMINAL_PROMPT/timeout stop a dead remote from hanging
-# every make run. Override with `make MABUR_VERSION=<sha-or-tag> mabur-rebuild`.
-MABUR_MASTER_SHA := $(shell GIT_TERMINAL_PROMPT=0 timeout 15 \
-	git ls-remote https://github.com/gilankpam/mabur.git \
-	refs/heads/master 2>/dev/null | cut -f1)
-MABUR_VERSION = $(or $(MABUR_MASTER_SHA),5790043765a30dc060822c0f8685b804e60fa402)
-MABUR_SITE = https://github.com/gilankpam/mabur.git
+# Feedback-repair data-gathering build: PINNED, not tracking master, so this
+# image and the air-unit firmware (openipc-builder, same branch name) carry the
+# identical mabur commit -- a mismatched pair has no control link and no video
+# (mabur CLAUDE.md, "Deploy is two devices"). The commit is gilankpam/mabur
+# c8f9863 + the phase-1 feedback-repair shadow mode (arq.log) with GS debug
+# logging on in the shipped bundle (docs/feedback-repair-rollout.md), on
+# notsudogood/mabur branch claude/wifi-fpv-link-architecture-1bms9l.
+# Override with `make MABUR_VERSION=<sha-or-tag> mabur-rebuild`.
+MABUR_VERSION = 52c3e0945af017c3b022f21366cef651b667858d
+MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
 MABUR_INSTALL_TARGET = YES
