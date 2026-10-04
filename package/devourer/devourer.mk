@@ -4,12 +4,14 @@
 #
 ################################################################################
 
-# Feedback-repair data-gathering build: PINNED to the gilankpam/devourer master
-# commit the 2026-09-27 buildroot-snapshot image was built against, and to the
-# same commit as the air-unit firmware from openipc-builder's same-named branch.
+# Feedback-repair build, rollout phase 2: PINNED to notsudogood/devourer branch
+# claude/wifi-fpv-link-architecture-1bms9l -- gilankpam/devourer master 56eabe4
+# (what the phase-1 images ran) plus per-packet hardware TX queue selection
+# (TxMode::hw_queue) -- and to the same commit as the air-unit firmware from
+# openipc-builder's same-named branch.
 # Override with `make DEVOURER_VERSION=<sha-or-tag> mabur-rebuild`.
-DEVOURER_VERSION = 56eabe4ae32f03992deeee8d0b666a7ce81fc81f
-DEVOURER_SITE = https://github.com/gilankpam/devourer.git
+DEVOURER_VERSION = cae7ce20b92f5d34dee1e08eb7eaf3f1b566320c
+DEVOURER_SITE = https://github.com/notsudogood/devourer.git
 DEVOURER_SITE_METHOD = git
 DEVOURER_LICENSE = GPL-2.0
 DEVOURER_INSTALL_STAGING = NO

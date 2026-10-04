@@ -145,9 +145,10 @@ jobs:
   # Feedback-repair data-gathering branch: publish its images the way master
   # does, under a fixed tag, so they outlive the 7-day artifact retention and
   # download without a GitHub login. Pairs with openipc-builder's
-  # feedback-repair-shadow release (same mabur + devourer commits).
+  # feedback-repair-turnaround release (same mabur + devourer commits). The
+  # phase-1 images stay under feedback-repair-shadow.
   release-feedback-repair:
-    name: Release feedback-repair-shadow (on its branch)
+    name: Release feedback-repair-turnaround (on its branch)
     runs-on: ubuntu-latest
     needs: [buildroot]
     if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/claude/wifi-fpv-link-architecture-1bms9l'
@@ -161,14 +162,15 @@ jobs:
         with:
           path: artifacts/
 
-      - name: Create/Update feedback-repair-shadow Release
+      - name: Create/Update feedback-repair-turnaround Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: feedback-repair-shadow
+          tag_name: feedback-repair-turnaround
           body: |
-            Feedback-repair phase-1 data-gathering GS image (mabur arq.log,
-            debug logging on by default). Pair with the air-unit firmware from
-            notsudogood/openipc-builder's feedback-repair-shadow release.
+            Feedback-repair phase-2 GS image: phase-1 arq.log plus the
+            turnaround bench (ta.log; enable with [turnaround] rate_hz in
+            /config/maburgs.toml). Pair with the air-unit firmware from
+            notsudogood/openipc-builder's feedback-repair-turnaround release.
             Commit: ${{ github.sha }}
           files: artifacts/**/*
           prerelease: true
