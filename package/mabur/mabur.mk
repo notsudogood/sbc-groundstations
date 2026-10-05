@@ -12,8 +12,11 @@
 # the shipped bundle) and 2 (the turnaround bench: [turnaround] in
 # maburgs.toml, off by default; ta.log), docs/feedback-repair-rollout.md, on
 # notsudogood/mabur branch claude/wifi-fpv-link-architecture-1bms9l.
+# 495f7da is GS-only on top of the air unit's 8b4ab10 (the ta.log pong parser
+# now expects the trailing FCS); no wire or config change, so the pair still
+# matches -- only RC_VERSION and the config keys have to agree.
 # Override with `make MABUR_VERSION=<sha-or-tag> mabur-rebuild`.
-MABUR_VERSION = 8b4ab10e99d7cda7520b906bd9fa47e9e73d5362
+MABUR_VERSION = 495f7da3fb474463cfb1575946c2e4d9d47a168a
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
