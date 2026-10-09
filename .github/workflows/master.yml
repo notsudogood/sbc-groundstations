@@ -142,14 +142,13 @@ jobs:
           prerelease: true
           overwrite: true
 
-  # Feedback-repair data-gathering branch: publish its images the way master
-  # does, under a fixed tag, so they outlive the 7-day artifact retention and
-  # download without a GitHub login. Pairs with openipc-builder's
-  # feedback-repair-listen release (same mabur + devourer commits). The
-  # phase-1 and phase-2 images stay under feedback-repair-shadow and
-  # feedback-repair-turnaround.
+  # Efficient-link branch: publish its images the way master does, under a
+  # fixed tag, so they outlive the 7-day artifact retention and download
+  # without a GitHub login. Pairs with openipc-builder's efficient-link-genlock
+  # release (same mabur + devourer commits). Earlier images stay under
+  # feedback-repair-shadow, -turnaround and -listen.
   release-feedback-repair:
-    name: Release feedback-repair-listen (on its branch)
+    name: Release efficient-link-genlock (on its branch)
     runs-on: ubuntu-latest
     needs: [buildroot]
     if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/claude/wifi-fpv-link-architecture-1bms9l'
@@ -163,16 +162,18 @@ jobs:
         with:
           path: artifacts/
 
-      - name: Create/Update feedback-repair-listen Release
+      - name: Create/Update efficient-link-genlock Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: feedback-repair-listen
+          tag_name: efficient-link-genlock
           body: |
-            Feedback-repair phase-3 GS image: arq.log (phase 1), the
-            turnaround bench (ta.log, [turnaround]) and the listen window
-            ([listen] ms / ab_s in /config/maburgs.toml). Pair with the
+            Efficient-link GS image: genlock (display.genlock and
+            display.genlock_miss_pct in /config/maburplay.toml, off by
+            default; the genlock: and regulator: lines in each session's
+            lat.log) on top of the parked feedback-repair pieces (arq.log,
+            [turnaround], [listen], all off by default). Pair with the
             air-unit firmware from notsudogood/openipc-builder's
-            feedback-repair-listen release.
+            efficient-link-genlock release.
             Commit: ${{ github.sha }}
           files: artifacts/**/*
           prerelease: true

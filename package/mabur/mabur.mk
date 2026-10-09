@@ -4,19 +4,21 @@
 #
 ################################################################################
 
-# Feedback-repair data-gathering build: PINNED, not tracking master, so this
-# image and the air-unit firmware (openipc-builder, same branch name) carry the
-# identical mabur commit -- a mismatched pair has no control link and no video
-# (mabur CLAUDE.md, "Deploy is two devices"). The commit is gilankpam/mabur
-# c8f9863 + feedback-repair rollout phases 1 (arq.log, GS debug logging on in
-# the shipped bundle) and 2 (the turnaround bench: [turnaround] in
-# maburgs.toml, off by default; ta.log), docs/feedback-repair-rollout.md, on
-# notsudogood/mabur branch claude/wifi-fpv-link-architecture-1bms9l.
-# b442ac3 adds rollout phase 3, the listen window (T_STATUS/T_LWSTAT,
-# CAP_LISTEN, [listen] in maburgs.toml, off by default); the air unit pins the
-# same commit. New types inside RC_VERSION 11, so a mixed pair still links.
+# Efficient-link build: PINNED, not tracking master, so this image and the
+# air-unit firmware (openipc-builder, same branch name) carry the identical
+# mabur commit -- a mismatched pair has no control link and no video (mabur
+# CLAUDE.md, "Deploy is two devices"). The commit is gilankpam/mabur c8f9863 +
+# the parked feedback-repair rollout (docs/feedback-repair-rollout.md:
+# arq.log, [turnaround], [listen], all off by default) + the efficient-link
+# plan (docs/efficient-link-plan.md) on notsudogood/mabur branch
+# claude/wifi-fpv-link-architecture-1bms9l. 1bf5d9b adds genlock: maburplay
+# measures the camera's phase against the screen's refresh (the genlock: line
+# in lat.log) and, with display.genlock = true in /config/maburplay.toml
+# (absent = off), steers the drone camera's rate through maburgs (T_GENLOCK,
+# CAP_GENLOCK); and the player's regulator: drop counters now land in lat.log
+# too. New type inside RC_VERSION 11, so a mixed pair still links.
 # Override with `make MABUR_VERSION=<sha-or-tag> mabur-rebuild`.
-MABUR_VERSION = b442ac3465c3b54107a0e0ad24293ee034299417
+MABUR_VERSION = 1bf5d9b02d4d754902c9dbe2732a6bc67233e1b9
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
