@@ -144,12 +144,12 @@ jobs:
 
   # Efficient-link branch: publish its images the way master does, under a
   # fixed tag, so they outlive the 7-day artifact retention and download
-  # without a GitHub login. Pairs with openipc-builder's efficient-link-nack
-  # release (both on mabur 68d22ce). Earlier images stay under
-  # efficient-link-genlock(-gs2) and feedback-repair-shadow, -turnaround,
-  # -listen.
+  # without a GitHub login. Pairs with openipc-builder's efficient-link-nack-d2
+  # release (drone mabur ac9d433, GS 6927ecc: same wire). Earlier images stay
+  # under efficient-link-nack-gs, efficient-link-genlock(-gs2) and
+  # feedback-repair-shadow, -turnaround, -listen.
   release-feedback-repair:
-    name: Release efficient-link-nack-gs (on its branch)
+    name: Release efficient-link-nack-gs2 (on its branch)
     runs-on: ubuntu-latest
     needs: [buildroot]
     if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/claude/wifi-fpv-link-architecture-1bms9l'
@@ -163,20 +163,20 @@ jobs:
         with:
           path: artifacts/
 
-      - name: Create/Update efficient-link-nack-gs Release
+      - name: Create/Update efficient-link-nack-gs2 Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: efficient-link-nack-gs
+          tag_name: efficient-link-nack-gs2
           body: |
-            Efficient-link GS image with gilankpam/mabur slice-salvage
-            merged (mabur 68d22ce): slice salvage, the software NACK
-            ([link.nack] in /config/maburgs.toml, off by default; ab_s
-            for an in-flight on/off A/B), link pairing and the channel
-            set, plus genlock (display.genlock in /config/maburplay.toml,
-            off by default). RC_VERSION 15: pair only with the air-unit
-            firmware from notsudogood/openipc-builder's
-            efficient-link-nack release. Delete /config/maburgs.toml and
-            reboot after flashing: its old keys fail boot.
+            Efficient-link GS image (mabur 6927ecc): as
+            efficient-link-nack-gs, plus the genlock fix -- the player
+            measures the drone camera before steering it (an ~18 s
+            calibration, `genlock-cal:` in lat.log) and only steers where
+            the camera responds; a camera that does not respond is left
+            at its configured rate. Genlock stays off by default
+            (display.genlock in /config/maburplay.toml). RC_VERSION 15:
+            pair with the air-unit firmware from
+            notsudogood/openipc-builder's efficient-link-nack-d2 release.
             Commit: ${{ github.sha }}
           files: artifacts/**/*
           prerelease: true
