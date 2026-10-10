@@ -145,10 +145,11 @@ jobs:
   # Efficient-link branch: publish its images the way master does, under a
   # fixed tag, so they outlive the 7-day artifact retention and download
   # without a GitHub login. Pairs with openipc-builder's efficient-link-genlock
-  # release (same mabur + devourer commits). Earlier images stay under
-  # feedback-repair-shadow, -turnaround and -listen.
+  # release (drone on mabur 1bf5d9b; this GS on 6057d44, the genlock
+  # camera-rate fix, same wire). Earlier images stay under
+  # efficient-link-genlock and feedback-repair-shadow, -turnaround, -listen.
   release-feedback-repair:
-    name: Release efficient-link-genlock (on its branch)
+    name: Release efficient-link-genlock-gs2 (on its branch)
     runs-on: ubuntu-latest
     needs: [buildroot]
     if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/claude/wifi-fpv-link-architecture-1bms9l'
@@ -162,12 +163,15 @@ jobs:
         with:
           path: artifacts/
 
-      - name: Create/Update efficient-link-genlock Release
+      - name: Create/Update efficient-link-genlock-gs2 Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: efficient-link-genlock
+          tag_name: efficient-link-genlock-gs2
           body: |
-            Efficient-link GS image: genlock (display.genlock and
+            Efficient-link GS image, genlock camera-rate fix (mabur
+            6057d44): the camera rate now comes from the phase slope, so
+            the loop can steer. Otherwise as efficient-link-genlock:
+            genlock (display.genlock and
             display.genlock_miss_pct in /config/maburplay.toml, off by
             default; the genlock: and regulator: lines in each session's
             lat.log) on top of the parked feedback-repair pieces (arq.log,

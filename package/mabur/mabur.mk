@@ -17,8 +17,13 @@
 # (absent = off), steers the drone camera's rate through maburgs (T_GENLOCK,
 # CAP_GENLOCK); and the player's regulator: drop counters now land in lat.log
 # too. New type inside RC_VERSION 11, so a mixed pair still links.
+# 6057d44 (GS only) reads the camera's rate from the genlock phase slope:
+# the bench showed cam=0 at 60 fps from pts steps, so the loop never
+# steered. The one deliberate exception to the identical-commit rule: the
+# drone stays on 1bf5d9b (openipc-builder efficient-link-genlock), whose
+# code and wire are unchanged by it.
 # Override with `make MABUR_VERSION=<sha-or-tag> mabur-rebuild`.
-MABUR_VERSION = 1bf5d9b02d4d754902c9dbe2732a6bc67233e1b9
+MABUR_VERSION = 6057d442e7ef49267e73ce3b9b91d164c98ca736
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
