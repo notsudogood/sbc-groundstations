@@ -15,16 +15,20 @@
 # ([link.nack], off by default; asks only for the shortfall, ab_s for an
 # in-flight on/off A/B), link pairing (/etc/mabur.key, missing = built-in
 # default) and the channel set ([radio] channels, channel = "auto").
-# Genlock (display.genlock in /config/maburplay.toml, T_GENLOCK tagged); since
-# mabur 6927ecc (2026-10-10) the player measures the camera before steering it
-# and stays below the rate floor the bench found -- GS-only, wire unchanged.
-# RC_VERSION 15: pair with the drone from openipc-builder efficient-link-nack-d2
-# (mabur ac9d433; same wire). /config/maburgs.toml keeps its old
+# Genlock (display.genlock in /config/maburplay.toml, T_GENLOCK tagged): the
+# player measures the camera before steering it. mabur cbd139f (2026-10-10
+# overnight build): NACK for the enhancement layer ([link.nack] enh, default
+# on), first ask once FEC is final, early give-up on doomed frames, raw GS
+# recording by default with .osd/.srt sidecars ([dvr] mode/osd_file/osd_fc),
+# genlock native-read and reference-step fixes, maburcal flight-frame sweep.
+# RC_VERSION 15: pair with the drone from openipc-builder efficient-link-nack-d3
+# (same commit). New keys all have defaults; a saved /config/maburplay.toml
+# keeps its old dvr.mode. /config/maburgs.toml keeps its old
 # keys across a reflash and the parser is strict ([turnaround], [listen],
 # vtx_id fail boot): delete it and reboot so the new default is copied in,
 # then re-apply edits.
 # Override with `make MABUR_VERSION=<sha-or-tag> mabur-rebuild`.
-MABUR_VERSION = 6927ecc0e3fed96e7860d7929f8337a8202986ba
+MABUR_VERSION = cbd139f229b7065fe52982da39a5e699ebed768b
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
