@@ -8,22 +8,21 @@
 # air-unit firmware (openipc-builder, same branch name) carry the identical
 # mabur commit -- a mismatched pair has no control link and no video (mabur
 # CLAUDE.md, "Deploy is two devices"). The commit is gilankpam/mabur c8f9863 +
-# the parked feedback-repair rollout (docs/feedback-repair-rollout.md:
-# arq.log, [turnaround], [listen], all off by default) + the efficient-link
-# plan (docs/efficient-link-plan.md) on notsudogood/mabur branch
-# claude/wifi-fpv-link-architecture-1bms9l. 1bf5d9b adds genlock: maburplay
-# measures the camera's phase against the screen's refresh (the genlock: line
-# in lat.log) and, with display.genlock = true in /config/maburplay.toml
-# (absent = off), steers the drone camera's rate through maburgs (T_GENLOCK,
-# CAP_GENLOCK); and the player's regulator: drop counters now land in lat.log
-# too. New type inside RC_VERSION 11, so a mixed pair still links.
-# 6057d44 (GS only) reads the camera's rate from the genlock phase slope:
-# the bench showed cam=0 at 60 fps from pts steps, so the loop never
-# steered. The one deliberate exception to the identical-commit rule: the
-# drone stays on 1bf5d9b (openipc-builder efficient-link-genlock), whose
-# code and wire are unchanged by it.
+# the efficient-link plan (docs/efficient-link-plan.md) on notsudogood/mabur
+# branch claude/wifi-fpv-link-architecture-1bms9l, with gilankpam/mabur
+# slice-salvage 4c66e11 merged in (2026-10-10, mabur 68d22ce): slice salvage
+# (truncated frames rebuilt from their complete slices), the software NACK
+# ([link.nack], off by default; asks only for the shortfall, ab_s for an
+# in-flight on/off A/B), link pairing (/etc/mabur.key, missing = built-in
+# default) and the channel set ([radio] channels, channel = "auto").
+# Genlock as before (display.genlock in /config/maburplay.toml, T_GENLOCK now
+# tagged). RC_VERSION 15: pair only with the drone on the same commit
+# (openipc-builder efficient-link-nack). /config/maburgs.toml keeps its old
+# keys across a reflash and the parser is strict ([turnaround], [listen],
+# vtx_id fail boot): delete it and reboot so the new default is copied in,
+# then re-apply edits.
 # Override with `make MABUR_VERSION=<sha-or-tag> mabur-rebuild`.
-MABUR_VERSION = 6057d442e7ef49267e73ce3b9b91d164c98ca736
+MABUR_VERSION = 68d22ce1ca36cea2753748082f17b9c73aed62b8
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
