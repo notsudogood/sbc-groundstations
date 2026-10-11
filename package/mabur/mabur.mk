@@ -21,14 +21,19 @@
 # on), first ask once FEC is final, early give-up on doomed frames, raw GS
 # recording by default with .osd/.srt sidecars ([dvr] mode/osd_file/osd_fc),
 # genlock native-read and reference-step fixes, maburcal flight-frame sweep.
-# RC_VERSION 15: pair with the drone from openipc-builder efficient-link-nack-d3
-# (same commit). New keys all have defaults; a saved /config/maburplay.toml
+# mabur d0425d1 (2026-10-11, GS-only): hop off a channel with sustained loss
+# and no visible cause ([hop.verdict] sustained_*), the start-up pick keeps a
+# known channel unless another is clearly calmer (radio.scan.
+# pick_busy_margin_pct), raw recording asks the drone for a keyframe, and the
+# raw recorder writes on its own thread. RC_VERSION 15: pair with the drone
+# from openipc-builder efficient-link-nack-d3 (mabur cbd139f; no drone change
+# since). New keys all have defaults; a saved /config/maburplay.toml
 # keeps its old dvr.mode. /config/maburgs.toml keeps its old
 # keys across a reflash and the parser is strict ([turnaround], [listen],
 # vtx_id fail boot): delete it and reboot so the new default is copied in,
 # then re-apply edits.
 # Override with `make MABUR_VERSION=<sha-or-tag> mabur-rebuild`.
-MABUR_VERSION = cbd139f229b7065fe52982da39a5e699ebed768b
+MABUR_VERSION = d0425d1513929b2b9d52dd4bc52c9d6dc26dd732
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
