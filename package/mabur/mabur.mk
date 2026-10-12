@@ -25,15 +25,19 @@
 # and no visible cause ([hop.verdict] sustained_*), the start-up pick keeps a
 # known channel unless another is clearly calmer (radio.scan.
 # pick_busy_margin_pct), raw recording asks the drone for a keyframe, and the
-# raw recorder writes on its own thread. RC_VERSION 15: pair with the drone
-# from openipc-builder efficient-link-nack-d3 (mabur cbd139f; no drone change
-# since). New keys all have defaults; a saved /config/maburplay.toml
+# raw recorder writes on its own thread. mabur cabcf43 (2026-10-12, GS CPU):
+# the decoder skips repair packets that can teach nothing (the second card's
+# copy, or a window already complete) before any GF work, and each card's RX
+# thread unpacks/CRC-checks its own video bodies (split 1) instead of the core
+# loop doing both cards' copies in series -- bench 2026-10-12 saw the core
+# thread at 95-97 % of a core at 35 Mb/s. RC_VERSION 15: pair with the drone
+# from openipc-builder efficient-link-nack-d4 (or d3; no wire change). New keys all have defaults; a saved /config/maburplay.toml
 # keeps its old dvr.mode. /config/maburgs.toml keeps its old
 # keys across a reflash and the parser is strict ([turnaround], [listen],
 # vtx_id fail boot): delete it and reboot so the new default is copied in,
 # then re-apply edits.
 # Override with `make MABUR_VERSION=<sha-or-tag> mabur-rebuild`.
-MABUR_VERSION = d0425d1513929b2b9d52dd4bc52c9d6dc26dd732
+MABUR_VERSION = cabcf43487894eb9ab367a8ca994c724a41d9e4c
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO

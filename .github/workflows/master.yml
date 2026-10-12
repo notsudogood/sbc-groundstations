@@ -144,12 +144,12 @@ jobs:
 
   # Efficient-link branch: publish its images the way master does, under a
   # fixed tag, so they outlive the 7-day artifact retention and download
-  # without a GitHub login. Pairs with openipc-builder's efficient-link-nack-d3
-  # release (drone mabur cbd139f, GS d0425d1: same wire). Earlier images stay
-  # under efficient-link-nack-gs(2,3), efficient-link-genlock(-gs2) and
+  # without a GitHub login. Pairs with openipc-builder's efficient-link-nack-d4
+  # release (drone mabur dfb1aaa, GS cabcf43: same wire). Earlier images stay
+  # under efficient-link-nack-gs(2,3,4), efficient-link-genlock(-gs2) and
   # feedback-repair-shadow, -turnaround, -listen.
   release-feedback-repair:
-    name: Release efficient-link-nack-gs4 (on its branch)
+    name: Release efficient-link-nack-gs5 (on its branch)
     runs-on: ubuntu-latest
     needs: [buildroot]
     if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/claude/wifi-fpv-link-architecture-1bms9l'
@@ -163,24 +163,23 @@ jobs:
         with:
           path: artifacts/
 
-      - name: Create/Update efficient-link-nack-gs4 Release
+      - name: Create/Update efficient-link-nack-gs5 Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: efficient-link-nack-gs4
+          tag_name: efficient-link-nack-gs5
           body: |
-            Efficient-link GS image (mabur d0425d1), GS-only fixes from
-            the 2026-10-11 flights: the GS now hops off a channel that
-            keeps losing packets with no visible cause (10 s mean loss
-            >= 0.5 % at good signal; [hop.verdict] sustained_*), the
-            start-up channel pick keeps the channel you last flew on
-            unless another is clearly quieter
-            (radio.scan.pick_busy_margin_pct), pressing record asks the
-            drone for a keyframe so recording starts at once, and raw
-            recording writes to the SD card on its own thread (it used to
-            stall the picture once a second). Plus everything in
-            efficient-link-nack-gs3. RC_VERSION 15: keep the air unit on
-            notsudogood/openipc-builder's efficient-link-nack-d3 release
-            (no drone change).
+            Efficient-link GS image (mabur cabcf43), GS CPU fix for test:
+            at 35 Mb/s one GS thread sat at 95-97 % of a core and the
+            latency climbed until the link hopped. The decoder now skips
+            repair packets that can teach nothing (the second card's copy,
+            or one whose window is already complete) before doing any
+            maths, and each card's receive thread checks and unpacks its
+            own packets instead of the main loop doing both cards' copies
+            one after the other. Video output is byte-identical on the
+            replay tests. Plus everything in efficient-link-nack-gs4.
+            RC_VERSION 15: keep the air unit on notsudogood/openipc-builder's
+            efficient-link-nack-d4 release (no drone change). Your saved
+            /config/maburgs.toml is kept.
             Commit: ${{ github.sha }}
           files: artifacts/**/*
           prerelease: true
