@@ -30,14 +30,19 @@
 # copy, or a window already complete) before any GF work, and each card's RX
 # thread unpacks/CRC-checks its own video bodies (split 1) instead of the core
 # loop doing both cards' copies in series -- bench 2026-10-12 saw the core
-# thread at 95-97 % of a core at 35 Mb/s. RC_VERSION 15: pair with the drone
-# from openipc-builder efficient-link-nack-d4 (or d3; no wire change). New keys all have defaults; a saved /config/maburplay.toml
+# thread at 95-97 % of a core at 35 Mb/s. mabur 3b1d509 (2026-10-13, GS
+# load diet): the decoder keeps symbols in a fixed ring instead of a map,
+# fragments are moved instead of copied into frame assembly, the repair
+# duplicate check is a table lookup, and the loss window keeps running sums
+# -- replay output byte-identical, ~39 % fewer core-thread instructions.
+# RC_VERSION 15: pair with the drone from openipc-builder
+# efficient-link-nack-d5 (or d4/d3; no wire change). New keys all have defaults; a saved /config/maburplay.toml
 # keeps its old dvr.mode. /config/maburgs.toml keeps its old
 # keys across a reflash and the parser is strict ([turnaround], [listen],
 # vtx_id fail boot): delete it and reboot so the new default is copied in,
 # then re-apply edits.
 # Override with `make MABUR_VERSION=<sha-or-tag> mabur-rebuild`.
-MABUR_VERSION = cabcf43487894eb9ab367a8ca994c724a41d9e4c
+MABUR_VERSION = 057decfc776ef7740b521efd9a90d1408c74700c
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
