@@ -35,14 +35,19 @@
 # fragments are moved instead of copied into frame assembly, the repair
 # duplicate check is a table lookup, and the loss window keeps running sums
 # -- replay output byte-identical, ~39 % fewer core-thread instructions.
-# RC_VERSION 15: pair with the drone from openipc-builder
-# efficient-link-nack-d5 (or d4/d3; no wire change). New keys all have defaults; a saved /config/maburplay.toml
+# mabur fc033f6 (2026-10-14): merges gilang/master -- streamed (slice by
+# slice) decode in maburplay ([decoder] stream, default on; needs this
+# image's rkvdec2 stream-mode kernel patch + MPP 14729dd5) -- plus the
+# 80 MHz linkbench tooling (linkbench-rx, below).
+# WIRE FLAG DAY: FrameHdr byte 3 is now slice_rows (was a constant codec
+# id) and RC_VERSION stays 15, so a mismatched pair does not refuse -- it
+# misassembles. Pair ONLY with openipc-builder efficient-link-nack-d7. New keys all have defaults; a saved /config/maburplay.toml
 # keeps its old dvr.mode. /config/maburgs.toml keeps its old
 # keys across a reflash and the parser is strict ([turnaround], [listen],
 # vtx_id fail boot): delete it and reboot so the new default is copied in,
 # then re-apply edits.
 # Override with `make MABUR_VERSION=<sha-or-tag> mabur-rebuild`.
-MABUR_VERSION = 057decfc776ef7740b521efd9a90d1408c74700c
+MABUR_VERSION = fc033f6712c0fc89594011f7297caf2814cc473e
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
@@ -102,7 +107,9 @@ MABUR_PRE_CONFIGURE_HOOKS += MABUR_STAGE_LIBS
 
 # Mirrors tools/build-arm64.sh, the reference cross build for this target.
 # maburd is SigmaStar/armv7 and never built here; the host test suite needs
-# GoogleTest; the linkbench/txagcbench tools are not shipped.
+# GoogleTest. linkbench-rx IS shipped (since gs7): the GS half of the
+# 80 MHz bench (mabur docs/bw80-research-2026-10-12.md); linkbench-tx is
+# built alongside it and left out.
 #
 # The per-chip devourer gates are listed exhaustively on purpose: every
 # DEVOURER_<chip> option defaults to ON, so a chip added upstream would opt
@@ -138,7 +145,7 @@ MABUR_CONF_OPTS = \
 	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(MABUR_GPIO_COMPAT_FLAG)" \
 	-DMABUR_BUILD_DRONE=OFF \
 	-DMABUR_BUILD_TESTS=OFF \
-	-DMABUR_BUILD_LINKBENCH=OFF \
+	-DMABUR_BUILD_LINKBENCH=ON \
 	-DMABUR_BUILD_GS=ON \
 	-DMABUR_PLAYER_HW=ON \
 	-DMABUR_PLAYER_GPU=ON \
@@ -206,6 +213,8 @@ define MABUR_INSTALL_TARGET_CMDS
 
 	$(INSTALL) -D -m 0755 $(@D)/tools/maburtop.py \
 		$(TARGET_DIR)/usr/bin/maburtop
+	$(INSTALL) -D -m 0755 $(MABUR_BUILDDIR)/bench/linkbench/linkbench-rx \
+		$(TARGET_DIR)/usr/bin/linkbench-rx
 	$(INSTALL) -D -m 0755 $(@D)/gs/bundle/maburcal \
 		$(TARGET_DIR)/usr/bin/maburcal
 
