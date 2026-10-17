@@ -46,8 +46,15 @@
 # keys across a reflash and the parser is strict ([turnaround], [listen],
 # vtx_id fail boot): delete it and reboot so the new default is copied in,
 # then re-apply edits.
+# mabur 9f2029e (2026-10-17): 80 MHz top rungs (VHT MCS3/80, MCS4/80); at
+# radio.width = 80 the cards sit at 40 and widen to 80 only while those rungs
+# fly or are probed (mabur docs/bw80.md). maburcal keeps a no-dip rate at its
+# pre-calibration power. The bundle defaults changed (width 80, channels
+# [36, 132], ladder): delete /config/maburgs.toml and /config/maburplay.toml
+# and reboot so the new defaults are copied in. Pair with openipc-builder
+# efficient-link-nack-d8.
 # Override with `make MABUR_VERSION=<sha-or-tag> mabur-rebuild`.
-MABUR_VERSION = fc033f6712c0fc89594011f7297caf2814cc473e
+MABUR_VERSION = 9f2029e3542b6a1fbc6be4cf14df689ec18b7771
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
