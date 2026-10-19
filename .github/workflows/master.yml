@@ -144,12 +144,12 @@ jobs:
 
   # Efficient-link branch: publish its images the way master does, under a
   # fixed tag, so they outlive the 7-day artifact retention and download
-  # without a GitHub login. Pairs with openipc-builder's
-  # efficient-link-nack-d8. Earlier images stay under
-  # efficient-link-nack-gs(2..7), efficient-link-genlock(-gs2) and
+  # without a GitHub login. Pairs ONLY with openipc-builder's
+  # efficient-link-nack-d10 (RC_VERSION 16 flag day). Earlier images stay
+  # under efficient-link-nack-gs(2..8), efficient-link-genlock(-gs2) and
   # feedback-repair-shadow, -turnaround, -listen.
   release-feedback-repair:
-    name: Release efficient-link-nack-gs8 (on its branch)
+    name: Release efficient-link-nack-gs9 (on its branch)
     runs-on: ubuntu-latest
     needs: [buildroot]
     if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/claude/wifi-fpv-link-architecture-1bms9l'
@@ -163,23 +163,24 @@ jobs:
         with:
           path: artifacts/
 
-      - name: Create/Update efficient-link-nack-gs8 Release
+      - name: Create/Update efficient-link-nack-gs9 Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: efficient-link-nack-gs8
+          tag_name: efficient-link-nack-gs9
           body: |
-            Efficient-link GS image (mabur 9f2029e) with 80 MHz top rungs:
-            the ladder now tops out at MCS3/80 and MCS4/80 instead of
-            MCS5/40. The cards stay at 40 MHz and widen to 80 only while
-            an 80 MHz rung is flown or tested, because a card tuned to 80
-            hears the slower rungs about 1-1.5 dB worse. Calibration
-            (maburcal) no longer sets a rate to full power when it finds
-            no limit; it keeps that rate's normal power. Unflown.
-            FLASH BOTH ENDS: pairs with notsudogood/openipc-builder's
-            efficient-link-nack-d8. NEW DEFAULTS (width 80, channels
-            36 and 132, new ladder): delete /config/maburgs.toml and
-            /config/maburplay.toml and reboot so they are copied in.
-            Everything in efficient-link-nack-gs7 is kept.
+            Efficient-link GS image (mabur e89faf7): Gilang's master merged.
+            The phase lock steers the drone camera's frame rate so frames
+            land a fixed margin before each screen refresh (Gilang's bench:
+            e2e p99 51 -> 37 ms; one flight; not yet measured on this
+            link), and replaces our genlock. The channel-health reads move
+            off the maburgs core thread (the 8-26 ms stall measured on this
+            GS). Demand refresh: the drone sends no periodic key frames, the
+            GS asks for one when its picture is damaged. The OSD shows
+            80 MHz rungs as /80. Everything in efficient-link-nack-gs8 is
+            kept. FLAG DAY: control protocol RC_VERSION 16, pairs ONLY with
+            notsudogood/openipc-builder's efficient-link-nack-d10. NEW
+            DEFAULTS: delete /config/maburgs.toml and /config/maburplay.toml
+            and reboot so they are copied in.
             Commit: ${{ github.sha }}
           files: artifacts/**/*
           prerelease: true

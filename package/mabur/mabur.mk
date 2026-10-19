@@ -53,8 +53,16 @@
 # [36, 132], ladder): delete /config/maburgs.toml and /config/maburplay.toml
 # and reboot so the new defaults are copied in. Pair with openipc-builder
 # efficient-link-nack-d8.
+# mabur e89faf7 (2026-10-19): Gilang's master merged -- the phase lock
+# (maburplay display.phase_lock, the sensor offset in the RCF), the window
+# sampler (channel-health reads off the maburgs core thread), demand refresh
+# (no periodic key frames; the GS asks on damage), reg.log/frame.log -- and
+# our genlock retired. RC_VERSION 16: a FLAG DAY, pair ONLY with
+# openipc-builder efficient-link-nack-d10. New default keys (phase_lock,
+# sched_cap_ms): delete /config/maburgs.toml and /config/maburplay.toml and
+# reboot so the new defaults are copied in.
 # Override with `make MABUR_VERSION=<sha-or-tag> mabur-rebuild`.
-MABUR_VERSION = 9f2029e3542b6a1fbc6be4cf14df689ec18b7771
+MABUR_VERSION = e89faf757c6b8f785af2fe258d901168637058a2
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
