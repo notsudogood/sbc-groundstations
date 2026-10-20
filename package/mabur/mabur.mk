@@ -61,8 +61,18 @@
 # openipc-builder efficient-link-nack-d10. New default keys (phase_lock,
 # sched_cap_ms): delete /config/maburgs.toml and /config/maburplay.toml and
 # reboot so the new defaults are copied in.
+# mabur 20a1ccb (2026-10-20, gs10): the backlog build -- NACK on and heavier
+# FEC on MCS0/20 and MCS1/20; cards drop to 20 MHz on the 20 MHz rungs
+# (radio.narrow_20); hops at 80 MHz use the full channel set
+# (radio.fast_hop_at_80 = false); 80 MHz on any primary, channels to 233; the
+# auto channel mode fixes (post-FEC loss rule, scout paused on fast rungs);
+# the 10 MHz rung ([link.narrow10], off); the Walksnail-format .srt; the
+# on-screen menu on the RunCam's 5-way stick (maburplay [input.menu]).
+# RC_VERSION stays 16. Pair with openipc-builder efficient-link-nack-d11.
+# New default keys: delete /config/maburgs.toml and /config/maburplay.toml
+# and reboot so the new defaults are copied in.
 # Override with `make MABUR_VERSION=<sha-or-tag> mabur-rebuild`.
-MABUR_VERSION = e89faf757c6b8f785af2fe258d901168637058a2
+MABUR_VERSION = 20a1ccb1f25da821df23fe4485fabbfc9a0430ad
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO

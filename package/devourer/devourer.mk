@@ -9,8 +9,11 @@
 # (what the phase-1 images ran) plus per-packet hardware TX queue selection
 # (TxMode::hw_queue) -- and to the same commit as the air-unit firmware from
 # openipc-builder's same-named branch.
+# 3524f4c (2026-10-20, gs10): the batched channel set (FastSetChannel) behind
+# the card width switches and full-set hops, 80 MHz on any primary, VHT 1SS
+# rates following the HT power diffs.
 # Override with `make DEVOURER_VERSION=<sha-or-tag> mabur-rebuild`.
-DEVOURER_VERSION = cae7ce20b92f5d34dee1e08eb7eaf3f1b566320c
+DEVOURER_VERSION = 3524f4c6903f44bb61a7be0bcf7d36d3da948db4
 DEVOURER_SITE = https://github.com/notsudogood/devourer.git
 DEVOURER_SITE_METHOD = git
 DEVOURER_LICENSE = GPL-2.0

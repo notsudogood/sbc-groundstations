@@ -144,12 +144,12 @@ jobs:
 
   # Efficient-link branch: publish its images the way master does, under a
   # fixed tag, so they outlive the 7-day artifact retention and download
-  # without a GitHub login. Pairs ONLY with openipc-builder's
-  # efficient-link-nack-d10 (RC_VERSION 16 flag day). Earlier images stay
-  # under efficient-link-nack-gs(2..8), efficient-link-genlock(-gs2) and
+  # without a GitHub login. Pairs with openipc-builder's
+  # efficient-link-nack-d11. Earlier images stay under
+  # efficient-link-nack-gs(2..9), efficient-link-genlock(-gs2) and
   # feedback-repair-shadow, -turnaround, -listen.
   release-feedback-repair:
-    name: Release efficient-link-nack-gs9 (on its branch)
+    name: Release efficient-link-nack-gs10 (on its branch)
     runs-on: ubuntu-latest
     needs: [buildroot]
     if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/claude/wifi-fpv-link-architecture-1bms9l'
@@ -163,24 +163,27 @@ jobs:
         with:
           path: artifacts/
 
-      - name: Create/Update efficient-link-nack-gs9 Release
+      - name: Create/Update efficient-link-nack-gs10 Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: efficient-link-nack-gs9
+          tag_name: efficient-link-nack-gs10
           body: |
-            Efficient-link GS image (mabur e89faf7): Gilang's master merged.
-            The phase lock steers the drone camera's frame rate so frames
-            land a fixed margin before each screen refresh (Gilang's bench:
-            e2e p99 51 -> 37 ms; one flight; not yet measured on this
-            link), and replaces our genlock. The channel-health reads move
-            off the maburgs core thread (the 8-26 ms stall measured on this
-            GS). Demand refresh: the drone sends no periodic key frames, the
-            GS asks for one when its picture is damaged. The OSD shows
-            80 MHz rungs as /80. Everything in efficient-link-nack-gs8 is
-            kept. FLAG DAY: control protocol RC_VERSION 16, pairs ONLY with
-            notsudogood/openipc-builder's efficient-link-nack-d10. NEW
-            DEFAULTS: delete /config/maburgs.toml and /config/maburplay.toml
-            and reboot so they are copied in.
+            Efficient-link GS image (mabur 20a1ccb, devourer 3524f4c): the
+            backlog build, none of it flown. NACK re-sends on, heavier error
+            correction on MCS0/20 (1.0 / 0.75) and MCS1/20 (0.75 / 0.5).
+            Cards drop to 20 MHz on the 20 MHz rungs. A hop at 80 MHz uses
+            the full channel set instead of the fast hop suspected of the
+            after-hop deafness. 80 MHz on any channel of a block, channels up
+            to 233. Auto channel mode: hops on loss after error correction,
+            no spare-card visits on the fast rungs. Walksnail-format .srt
+            next to raw recordings. A minimal on-screen menu on the 5-way
+            stick (centre opens: channel hop, channel, Bandwidth Normal/Wide).
+            The 10 MHz bottom rung is built but OFF ([link.narrow10]).
+            Every new behaviour has its own switch. Pair with
+            notsudogood/openipc-builder's efficient-link-nack-d11 (same
+            RC_VERSION 16 as gs9/d10). NEW DEFAULTS: delete
+            /config/maburgs.toml and /config/maburplay.toml and reboot so
+            they are copied in.
             Commit: ${{ github.sha }}
           files: artifacts/**/*
           prerelease: true
