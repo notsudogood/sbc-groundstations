@@ -71,8 +71,13 @@
 # RC_VERSION stays 16. Pair with openipc-builder efficient-link-nack-d11.
 # New default keys: delete /config/maburgs.toml and /config/maburplay.toml
 # and reboot so the new defaults are copied in.
+# mabur f79e871 (2026-10-21, gs11, a data build): every card width switch
+# and full-set hop logs devourer's time breakdown (a "set:" line);
+# radio.lean_width (false) / radio.lean_verify (true) for the lean width
+# switch. No wire change, RC_VERSION stays 16; the new keys are optional.
+# Pair with openipc-builder efficient-link-nack-d12.
 # Override with `make MABUR_VERSION=<sha-or-tag> mabur-rebuild`.
-MABUR_VERSION = 20a1ccb1f25da821df23fe4485fabbfc9a0430ad
+MABUR_VERSION = f79e8715d5d4442dc76df1d789a7d6f371b6e0cb
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
