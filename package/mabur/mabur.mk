@@ -76,8 +76,12 @@
 # radio.lean_width (false) / radio.lean_verify (true) for the lean width
 # switch. No wire change, RC_VERSION stays 16; the new keys are optional.
 # Pair with openipc-builder efficient-link-nack-d12.
+# mabur 4bca44c (2026-10-21, gs11): f79e871 + the GS menu fix -- the stick's
+# bias = "none" now leaves the pins as the board set them (gs10 switched the
+# pull off and the RunCam stick did nothing), and each menu line and press is
+# logged. Player-only; the drone stays on f79e871.
 # Override with `make MABUR_VERSION=<sha-or-tag> mabur-rebuild`.
-MABUR_VERSION = f79e8715d5d4442dc76df1d789a7d6f371b6e0cb
+MABUR_VERSION = 4bca44cafd1ef54239c73a079009313aa63682d1
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO

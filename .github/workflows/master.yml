@@ -168,8 +168,9 @@ jobs:
         with:
           tag_name: efficient-link-nack-gs11
           body: |
-            Efficient-link GS image (mabur f79e871, devourer 097c527): a data
-            build on top of gs10. No behaviour change by default: every card
+            Efficient-link GS image (mabur 4bca44c, devourer 097c527): a data
+            build on top of gs10, plus the on-screen menu fix (the 5-way
+            stick did nothing on gs10). No other behaviour change by default: every card
             width switch and full-set hop now logs a "set:" line with the
             time split (lock wait, priming read, write batches, single round
             trips, re-asserts after the set). The lean width switch is in,
