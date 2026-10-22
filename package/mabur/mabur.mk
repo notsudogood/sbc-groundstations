@@ -80,8 +80,13 @@
 # bias = "none" now leaves the pins as the board set them (gs10 switched the
 # pull off and the RunCam stick did nothing), and each menu line and press is
 # logged. Player-only; the drone stays on f79e871.
+# mabur da1a575 (2026-10-22, gs12): the GS menu crash fixed (gs11's centre
+# press segfaulted maburplay: the menu pushed through a null rect list), and
+# radio.switch_rt_prio for the card width switches (0 = off; the drone's d13
+# boost, 14-17 ms against 79-135 there). Pair with openipc-builder
+# efficient-link-nack-d13.
 # Override with `make MABUR_VERSION=<sha-or-tag> mabur-rebuild`.
-MABUR_VERSION = 4bca44cafd1ef54239c73a079009313aa63682d1
+MABUR_VERSION = da1a575b0c34f3e0c5ba816a81bb216e824d778c
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO

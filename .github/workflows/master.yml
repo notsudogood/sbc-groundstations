@@ -145,11 +145,11 @@ jobs:
   # Efficient-link branch: publish its images the way master does, under a
   # fixed tag, so they outlive the 7-day artifact retention and download
   # without a GitHub login. Pairs with openipc-builder's
-  # efficient-link-nack-d12. Earlier images stay under
-  # efficient-link-nack-gs(2..10), efficient-link-genlock(-gs2) and
+  # efficient-link-nack-d13. Earlier images stay under
+  # efficient-link-nack-gs(2..11), efficient-link-genlock(-gs2) and
   # feedback-repair-shadow, -turnaround, -listen.
   release-feedback-repair:
-    name: Release efficient-link-nack-gs11 (on its branch)
+    name: Release efficient-link-nack-gs12 (on its branch)
     runs-on: ubuntu-latest
     needs: [buildroot]
     if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/claude/wifi-fpv-link-architecture-1bms9l'
@@ -163,24 +163,19 @@ jobs:
         with:
           path: artifacts/
 
-      - name: Create/Update efficient-link-nack-gs11 Release
+      - name: Create/Update efficient-link-nack-gs12 Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: efficient-link-nack-gs11
+          tag_name: efficient-link-nack-gs12
           body: |
-            Efficient-link GS image (mabur 4bca44c, devourer 097c527): a data
-            build on top of gs10, plus the on-screen menu fix (the 5-way
-            stick did nothing on gs10). No other behaviour change by default: every card
-            width switch and full-set hop now logs a "set:" line with the
-            time split (lock wait, priming read, write batches, single round
-            trips, re-asserts after the set). The lean width switch is in,
-            OFF (radio.lean_width = false); with it on, a readback check
-            (radio.lean_verify) falls back to the full set on any difference
-            and logs each mismatching register. Pair with
-            notsudogood/openipc-builder's efficient-link-nack-d12 (same
-            RC_VERSION 16). The new keys are optional: an existing
-            /config/maburgs.toml keeps working; delete it and reboot to get
-            the new keys written in.
+            Efficient-link GS image (mabur da1a575, devourer 097c527): gs11
+            plus the on-screen menu crash fix (gs11's centre press restarted
+            the video player) and radio.switch_rt_prio for the card width
+            switches, OFF by default (0): the drone's d13 boost, which took
+            its width switch from 79-135 ms to 14-17 ms. Every card switch
+            still logs its "set:" time line, ending "[rt 60 x2]" when the
+            boost ran. Pair with notsudogood/openipc-builder's
+            efficient-link-nack-d13 (RC_VERSION 16). The new key is optional.
             Commit: ${{ github.sha }}
           files: artifacts/**/*
           prerelease: true
