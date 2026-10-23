@@ -1,3 +1,13 @@
+            Efficient-link GS image (mabur a711271, devourer 097c527): gs12
+            plus two ladder switches, both OFF by default. link.fast_fall_pre
+            (0): a step down taken at that much loss before error correction
+            skips straight to the rung that fits what still gets through.
+            link.promote_lat_guard_ms (0): right after a step up, frames
+            arriving this many ms late (the drone cannot get them out at the
+            new rung) send the link straight back, before the loss shows.
+            Every "ctl: rung" line now ends with transit=. Pair with
+            notsudogood/openipc-builder's efficient-link-nack-d14
+            (RC_VERSION 16). The new keys are optional.
 name: Build and Release
 on:
   push:
@@ -145,11 +155,11 @@ jobs:
   # Efficient-link branch: publish its images the way master does, under a
   # fixed tag, so they outlive the 7-day artifact retention and download
   # without a GitHub login. Pairs with openipc-builder's
-  # efficient-link-nack-d13. Earlier images stay under
-  # efficient-link-nack-gs(2..11), efficient-link-genlock(-gs2) and
+  # efficient-link-nack-d14. Earlier images stay under
+  # efficient-link-nack-gs(2..12), efficient-link-genlock(-gs2) and
   # feedback-repair-shadow, -turnaround, -listen.
   release-feedback-repair:
-    name: Release efficient-link-nack-gs12 (on its branch)
+    name: Release efficient-link-nack-gs13 (on its branch)
     runs-on: ubuntu-latest
     needs: [buildroot]
     if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/claude/wifi-fpv-link-architecture-1bms9l'
@@ -163,10 +173,10 @@ jobs:
         with:
           path: artifacts/
 
-      - name: Create/Update efficient-link-nack-gs12 Release
+      - name: Create/Update efficient-link-nack-gs13 Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: efficient-link-nack-gs12
+          tag_name: efficient-link-nack-gs13
           body: |
             Efficient-link GS image (mabur da1a575, devourer 097c527): gs11
             plus the on-screen menu crash fix (gs11's centre press restarted

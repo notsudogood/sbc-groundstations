@@ -85,8 +85,13 @@
 # radio.switch_rt_prio for the card width switches (0 = off; the drone's d13
 # boost, 14-17 ms against 79-135 there). Pair with openipc-builder
 # efficient-link-nack-d13.
+# mabur a711271 (2026-10-23, gs13): da1a575 + link.fast_fall_pre (0 = off; a
+# deep partial fade skips to the rung that fits) and link.promote_lat_guard_ms
+# (0 = off; a promote whose frames start arriving late goes straight back as a
+# probation failure, before the loss shows). ctl: rung lines carry transit=.
+# Pair with openipc-builder efficient-link-nack-d14.
 # Override with `make MABUR_VERSION=<sha-or-tag> mabur-rebuild`.
-MABUR_VERSION = da1a575b0c34f3e0c5ba816a81bb216e824d778c
+MABUR_VERSION = a711271ef6d4c6c8b576e9b60cfa987eed0ade54
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
