@@ -98,7 +98,12 @@
 # maburgs.toml / maburplay.toml (and the menu's choice) once when the image's
 # default changed. Pair with openipc-builder efficient-link-nack-d15.
 # Override with `make MABUR_VERSION=<sha-or-tag> mabur-rebuild`.
-MABUR_VERSION = e474f4142396645d722e48a691a8a32999074dfa
+# mabur 7bd3a90 (2026-10-24, gs15): gs14 + the multi-rung drop
+# (link.fast_fall_pre 0.5) and the promote latency guard
+# (link.promote_lat_guard_ms 100) on by default; the receive cards pin
+# devourer's wide-TX IGI floor off. Pair with openipc-builder
+# efficient-link-nack-d16.
+MABUR_VERSION = 7bd3a90537558d1a5f227219f5eda5ce175ed902
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO

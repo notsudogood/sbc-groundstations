@@ -19,7 +19,9 @@
 # b7084d0 (2026-10-24, gs14): + the 8822E spur table extension to 5880 MHz
 # (177@20, 173+177@40), behind tuning.spur_ext_8822e (mabur radio.spur_ext).
 # Override with `make DEVOURER_VERSION=<sha-or-tag> mabur-rebuild`.
-DEVOURER_VERSION = b7084d07eda6a499dc73fae0b5cb4c8f9657377e
+# bcf0b86 (2026-10-24, gs15): + Gilang's 8822C 40 MHz fix (#484); the GS
+# pins its IGI floor off (it sends only 20 MHz frames).
+DEVOURER_VERSION = bcf0b86b8e353e422fff55cb3f0a8676ca5bbb66
 DEVOURER_SITE = https://github.com/notsudogood/devourer.git
 DEVOURER_SITE_METHOD = git
 DEVOURER_LICENSE = GPL-2.0
