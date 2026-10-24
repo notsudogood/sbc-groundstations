@@ -107,6 +107,15 @@ Invalid values are replaced by their defaults and logged to the console.
 Deleting a file restores the board's default on the next boot; the pristine
 defaults are kept at `/usr/share/config-defaults/`.
 
+`sysupgrade` rewrites the system but keeps `/config`, so `maburgs.toml` and
+`maburplay.toml` are refreshed once whenever a new image ships a different
+default: the file is replaced by the new default, an edited one is first
+copied to `/config/old/<name>.oldN`, and the on-screen menu's saved choice
+(`/etc/maburgs.menu`) is cleared with `maburgs.toml`. Edits made on the
+current image are kept. Each refresh is listed in `/config/config-reset.log`.
+To keep your files across every upgrade, create an empty
+`/config/keep-config`. `wifi.toml` is never refreshed.
+
 # Factory Reset
 
 - Hold the `Right` button during boot.

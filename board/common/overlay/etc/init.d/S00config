@@ -17,15 +17,77 @@
 # the seeding below still fills it, and the box boots with working configs
 # instead of two dangling symlinks and no ground station.
 
-CONFIG_DIR=/config
-DEFAULTS_DIR=/usr/share/config-defaults
+CONFIG_DIR=${CONFIG_DIR:-/config}
+DEFAULTS_DIR=${DEFAULTS_DIR:-/usr/share/config-defaults}
+# mabur's two files are refreshed once per new image (refresh_mabur). The
+# stamps are the image defaults each was last refreshed from; touch
+# $CONFIG_DIR/keep-config to never refresh.
+REFRESH_FILES="maburgs.toml maburplay.toml"
+STAMP_DIR=$CONFIG_DIR/.image-defaults
+OLD_DIR=$CONFIG_DIR/old
+MENU_FILE=${MENU_FILE:-/etc/maburgs.menu}
+
+is_refreshed() { case " $REFRESH_FILES " in *" $1 "*) return 0 ;; esac; return 1; }
+
+same() {
+	[ -f "$1" ] && [ -f "$2" ] || return 1
+	if command -v cmp >/dev/null 2>&1; then cmp -s "$1" "$2"
+	else [ "$(md5sum <"$1")" = "$(md5sum <"$2")" ]; fi
+}
 
 seed_defaults() {
 	[ -d "$DEFAULTS_DIR" ] || return 0
 	for f in "$DEFAULTS_DIR"/*; do
 		[ -f "$f" ] || continue
-		[ -e "$CONFIG_DIR/$(basename "$f")" ] && continue
+		name=$(basename "$f")
+		[ -e "$CONFIG_DIR/$name" ] && continue
 		cp "$f" "$CONFIG_DIR/"
+		if is_refreshed "$name"; then mkdir -p "$STAMP_DIR" && cp "$f" "$STAMP_DIR/$name"; fi
+	done
+	sync
+}
+
+# New image, new defaults: sysupgrade rewrites the root filesystem only, so
+# a maburgs.toml / maburplay.toml saved under an older image hid every
+# default the new image changed -- and a key the old file lacks takes the
+# code default, not the shipped one. Once per change of the shipped
+# default: the file is replaced by the new default; an edited one is first
+# copied to $OLD_DIR/<name>.oldN. With maburgs.toml goes the on-screen
+# menu's saved choice ($MENU_FILE: hop, channel, bandwidth), which
+# overrides it. Edits made under THIS image stay (the stamp matches), and
+# so does everything with $CONFIG_DIR/keep-config there. wifi.toml is never
+# touched.
+refresh_mabur() {
+	for name in $REFRESH_FILES; do
+		def=$DEFAULTS_DIR/$name cur=$CONFIG_DIR/$name stamp=$STAMP_DIR/$name
+		[ -f "$def" ] && [ -f "$cur" ] || continue
+		mkdir -p "$STAMP_DIR"
+		if same "$def" "$cur"; then
+			same "$def" "$stamp" || cp "$def" "$stamp"
+			continue
+		fi
+		same "$def" "$stamp" && continue
+		if [ -e "$CONFIG_DIR/keep-config" ]; then
+			echo "config: new image, $cur kept as is (keep-config is there)"
+			continue
+		fi
+		what="reset to the new default"
+		if ! same "$cur" "$stamp"; then
+			n=1
+			while [ -e "$OLD_DIR/$name.old$n" ]; do n=$((n + 1)); done
+			mkdir -p "$OLD_DIR" && cp "$cur" "$OLD_DIR/$name.old$n" || {
+				echo "config: cannot back up $cur, kept as is"
+				continue
+			}
+			what="$what; yours is $OLD_DIR/$name.old$n"
+		fi
+		cp "$def" "$cur" && cp "$def" "$stamp"
+		if [ "$name" = maburgs.toml ] && [ -f "$MENU_FILE" ]; then
+			mkdir -p "$OLD_DIR" && mv "$MENU_FILE" "$OLD_DIR/maburgs.menu.old" &&
+				what="$what; the menu's saved choice was cleared"
+		fi
+		echo "config: new image -- $cur $what"
+		echo "$(date) $cur $what" >>"$CONFIG_DIR/config-reset.log"
 	done
 	sync
 }
@@ -44,6 +106,12 @@ case "$1" in
 			echo "config: mounting $dev on $CONFIG_DIR failed, using the overlay instead"
 		fi
 		seed_defaults
+		refresh_mabur
+		;;
+	refresh)
+		# The same seed + refresh on a mounted /config, without the mount.
+		seed_defaults
+		refresh_mabur
 		;;
 	stop)
 		sync
@@ -54,7 +122,7 @@ case "$1" in
 		"$0" start
 		;;
 	*)
-		echo "usage: $0 {start|stop|restart}"
+		echo "usage: $0 {start|stop|restart|refresh}"
 		exit 1
 		;;
 esac
