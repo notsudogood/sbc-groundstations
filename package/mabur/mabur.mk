@@ -90,8 +90,15 @@
 # (0 = off; a promote whose frames start arriving late goes straight back as a
 # probation failure, before the loss shows). ctl: rung lines carry transit=.
 # Pair with openipc-builder efficient-link-nack-d14.
+# mabur e474f41 (2026-10-24, gs14): fresh configs and new defaults -- code
+# defaults match the bundle (phase lock, NACK, narrow_20, hop confirm 1000);
+# channel set [36, 100, 116, 132], hop on; the 10 MHz bottom rung on (off
+# with link.static_mcs); radio.spur_warn (on), radio.spur_ext (off); the
+# on-screen menu in the Ascent layout. S00config refreshes /config's
+# maburgs.toml / maburplay.toml (and the menu's choice) once when the image's
+# default changed. Pair with openipc-builder efficient-link-nack-d15.
 # Override with `make MABUR_VERSION=<sha-or-tag> mabur-rebuild`.
-MABUR_VERSION = a711271ef6d4c6c8b576e9b60cfa987eed0ade54
+MABUR_VERSION = e474f4142396645d722e48a691a8a32999074dfa
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
