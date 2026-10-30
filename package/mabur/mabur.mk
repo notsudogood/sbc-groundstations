@@ -103,7 +103,7 @@
 # (link.promote_lat_guard_ms 100) on by default; the receive cards pin
 # devourer's wide-TX IGI floor off. Pair with openipc-builder
 # efficient-link-nack-d16.
-# mabur 047114e6 (2026-10-30, gs16): Gilang's master merged (phase lock
+# mabur d3b3bdad (2026-10-30, gs16): Gilang's master merged (phase lock
 # pauses on a frame-rate mismatch, release thread, uplink delivery % on the
 # OSD, burned DVR rework); the menu's Camera and Settings tabs (maburcal's
 # run and remove-calibration from the goggles); menu text without the
@@ -118,7 +118,7 @@
 # layout: never pair across the two). The bundles changed, so S00config
 # refreshes /config's maburgs.toml / maburplay.toml once (old copies in
 # /config/old/, the menu's choice cleared).
-MABUR_VERSION = 047114e6d42c514d7a543115e1efde3de4c0bfed
+MABUR_VERSION = d3b3bdad21350e0435269e9cce8a95c10bbb3fb3
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO

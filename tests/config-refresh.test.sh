@@ -47,4 +47,24 @@ image "36, 104" true
 run
 grep -q '\[100\]' "$CONFIG_DIR/maburgs.toml" || ko "keep-config ignored"
 
+# Clean-slate epoch (a GS last booted on an image older than the epoch):
+# both files and the menu reset even with keep-config there, which goes too;
+# wifi.toml is still not touched.
+printf 'channels = [149]\n' >"$CONFIG_DIR/maburgs.toml"
+printf 'phase_lock = false\n' >"$CONFIG_DIR/maburplay.toml"
+printf 'hop=off\n' >"$MENU_FILE"
+rm -f "$CONFIG_DIR/.config-epoch"
+run
+cmp -s "$DEFAULTS_DIR/maburgs.toml" "$CONFIG_DIR/maburgs.toml" || ko "epoch: maburgs not reset"
+cmp -s "$DEFAULTS_DIR/maburplay.toml" "$CONFIG_DIR/maburplay.toml" || ko "epoch: maburplay not reset"
+[ ! -f "$MENU_FILE" ] || ko "epoch: menu choice not cleared"
+[ ! -e "$CONFIG_DIR/keep-config" ] || ko "epoch: keep-config not removed"
+grep -q client "$CONFIG_DIR/wifi.toml" || ko "epoch: wifi.toml touched"
+ls "$CONFIG_DIR"/old/maburplay.toml.old* >/dev/null 2>&1 || ko "epoch: maburplay not backed up"
+[ -s "$CONFIG_DIR/.config-epoch" ] || ko "epoch: not recorded"
+# ...once: an edit after it survives the next boot of the same image.
+printf 'channels = [64]\n' >"$CONFIG_DIR/maburgs.toml"
+run
+grep -q '\[64\]' "$CONFIG_DIR/maburgs.toml" || ko "epoch: edit after the wipe lost"
+
 [ "$fail" = 0 ] && echo "config refresh: OK" || { echo "$fail failure(s)"; exit 1; }
