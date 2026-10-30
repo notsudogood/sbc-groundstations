@@ -145,11 +145,11 @@ jobs:
   # Efficient-link branch: publish its images the way master does, under a
   # fixed tag, so they outlive the 7-day artifact retention and download
   # without a GitHub login. Pairs with openipc-builder's
-  # efficient-link-nack-d16. Earlier images stay under
-  # efficient-link-nack-gs(2..14), efficient-link-genlock(-gs2) and
+  # efficient-link-nack-d17. Earlier images stay under
+  # efficient-link-nack-gs(2..15), efficient-link-genlock(-gs2) and
   # feedback-repair-shadow, -turnaround, -listen.
   release-feedback-repair:
-    name: Release efficient-link-nack-gs15 (on its branch)
+    name: Release efficient-link-nack-gs16 (on its branch)
     runs-on: ubuntu-latest
     needs: [buildroot]
     if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/claude/wifi-fpv-link-architecture-1bms9l'
@@ -163,18 +163,20 @@ jobs:
         with:
           path: artifacts/
 
-      - name: Create/Update efficient-link-nack-gs15 Release
+      - name: Create/Update efficient-link-nack-gs16 Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: efficient-link-nack-gs15
+          tag_name: efficient-link-nack-gs16
           body: |
-            Efficient-link GS image gs15 (mabur 7bd3a90, devourer bcf0b86):
-            gs14 plus two ladder switches now on by default: the multi-rung
-            drop (link.fast_fall_pre 0.5) and the promote latency guard
-            (link.promote_lat_guard_ms 100). gs14's first-boot refresh puts
-            them in /config/maburgs.toml (the default changed, so the file is
-            refreshed once more; old copies in /config/old/). Pair with
-            notsudogood/openipc-builder's efficient-link-nack-d16 (RC_VERSION 16).
+            Efficient-link GS image gs16 (mabur 047114e6, devourer a9a54fe):
+            the GS menu's Camera and Settings tabs, raw recordings that
+            really write their .osd/.srt/.link.srt and split at arm/disarm,
+            MCS3/80 FEC 0.5/0.25, the new link controls on (edge_per fade
+            rule, residual multi-rung drop, penalty fix, faster climb back),
+            and the 8812EU 10 MHz MAC-clock fix. First boot refreshes
+            /config/maburgs.toml and maburplay.toml once (old copies in
+            /config/old/). RC_VERSION 17: a flag day, pair ONLY with
+            notsudogood/openipc-builder's efficient-link-nack-d17.
             Commit: ${{ github.sha }}
           files: artifacts/**/*
           prerelease: true

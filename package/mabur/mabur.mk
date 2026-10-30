@@ -103,7 +103,22 @@
 # (link.promote_lat_guard_ms 100) on by default; the receive cards pin
 # devourer's wide-TX IGI floor off. Pair with openipc-builder
 # efficient-link-nack-d16.
-MABUR_VERSION = 7bd3a90537558d1a5f227219f5eda5ce175ed902
+# mabur 047114e6 (2026-10-30, gs16): Gilang's master merged (phase lock
+# pauses on a frame-rate mismatch, release thread, uplink delivery % on the
+# OSD, burned DVR rework); the menu's Camera and Settings tabs (maburcal's
+# run and remove-calibration from the goggles); menu text without the
+# see-through ring; lean width switch on (radio.lean_width); the GS's own
+# per-core CPU in flight.jsonl. Raw recordings now really write their .osd /
+# .srt / .link.srt (no build before did) and split at arm and disarm
+# (dvr.split_at_arm), so walksnail-osd-tool sees the flight at full frame
+# rate. MCS3/80 FEC 0.5/0.25; the edge_per fade rule, the residual-keyed
+# multi-rung drop, the penalty memory fix and the faster climb back, all on.
+# RC_VERSION 17: a FLAG DAY, pair ONLY with openipc-builder
+# efficient-link-nack-d17 (Gilang's firmware also says 17 with a different
+# layout: never pair across the two). The bundles changed, so S00config
+# refreshes /config's maburgs.toml / maburplay.toml once (old copies in
+# /config/old/, the menu's choice cleared).
+MABUR_VERSION = 047114e6d42c514d7a543115e1efde3de4c0bfed
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO

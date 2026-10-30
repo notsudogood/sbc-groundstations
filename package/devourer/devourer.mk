@@ -21,7 +21,12 @@
 # Override with `make DEVOURER_VERSION=<sha-or-tag> mabur-rebuild`.
 # bcf0b86 (2026-10-24, gs15): + Gilang's 8822C 40 MHz fix (#484); the GS
 # pins its IGI floor off (it sends only 20 MHz frames).
-DEVOURER_VERSION = bcf0b86b8e353e422fff55cb3f0a8676ca5bbb66
+# a9a54fe (2026-10-30, gs16): + an 8812EU leaving 10 MHz through a full
+# channel set gets its 80M MAC clock and microsecond ticks back. After a
+# 10 MHz trip the receive cards read path-B RSSI -110 and SNR ~0 for the rest
+# of the flight (0008); that the clock caused it is inferred, not yet
+# bench-confirmed.
+DEVOURER_VERSION = a9a54fe1769d9994e269d9a2a7151e6687de5517
 DEVOURER_SITE = https://github.com/notsudogood/devourer.git
 DEVOURER_SITE_METHOD = git
 DEVOURER_LICENSE = GPL-2.0
