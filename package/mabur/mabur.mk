@@ -122,7 +122,9 @@
 # verdict reads weak or fading keeps the current rung instead of raising it
 # to the pre-onset ref_rung (flight 0009: twice to MCS4/40 mid-fade). Drone
 # side of the same commit (d18): radio resting at 20 MHz. No wire change.
-MABUR_VERSION = c60b1621dfd8693f93dde875a599b5964719e50e
+# 36515ba5 (2026-10-31, gs17): + dvr.split_at_arm off by default: a d18
+# drone keeps its frame rate in low power, so one recording is one file.
+MABUR_VERSION = 36515ba5bae9bd461f3b3fca4ca29583fe078d84
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
