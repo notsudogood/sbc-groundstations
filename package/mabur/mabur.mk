@@ -127,7 +127,10 @@
 # 5cd3c79b (2026-10-31, gs17): + the recording's link detail moves from
 # record-NNNN.link.srt to a styled record-NNNN.ass (walksnail-osd-tool took
 # the .link.srt as its SRT and drew nothing).
-MABUR_VERSION = 5cd3c79bc3b51c1595c3c5ee8028b1a9ea4b1403
+# 2fb591eb (2026-10-31, gs17): + the Camera tab's fifth preset, "Crop 60"
+# (1080p60 from the drone camera's unbinned crop; a d18 drone offers it).
+# The drone-side IGI floor learner in the same range is drone-only.
+MABUR_VERSION = 2fb591ebf74bb4dfd415050d267bd2189180f1d4
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO

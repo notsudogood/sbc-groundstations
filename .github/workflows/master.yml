@@ -168,7 +168,7 @@ jobs:
         with:
           tag_name: efficient-link-nack-gs17
           body: |
-            Efficient-link GS image gs17 (mabur 5cd3c79b, devourer a9a54fe):
+            Efficient-link GS image gs17 (mabur 2fb591eb, devourer a9a54fe):
             gs16 plus hop.fade_keeps_rung: a channel-hop order placed
             while the signal is weak or fading keeps the current rung
             instead of jumping back to the pre-trouble one (flight 0009:
@@ -176,7 +176,10 @@ jobs:
             no longer split at arm/disarm (dvr.split_at_arm off: a d18
             drone keeps 60 fps in low power), and the link detail
             subtitles are record-NNNN.ass (walksnail-osd-tool ignores it;
-            VLC/mpv/ffmpeg read it). No wire change:
+            VLC/mpv/ffmpeg read it), and the Camera tab has a fifth
+            preset, Crop 60 (1080p60 from the drone camera's unbinned
+            crop, 1.4x zoom; a d18 drone with waybeam's driver offers
+            it). No wire change:
             pairs with openipc-builder efficient-link-nack-d17 and d18
             (RC_VERSION 17; never with Gilang's firmware). The bundle
             changed, so first boot refreshes /config/maburgs.toml once
