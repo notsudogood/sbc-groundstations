@@ -145,11 +145,11 @@ jobs:
   # Efficient-link branch: publish its images the way master does, under a
   # fixed tag, so they outlive the 7-day artifact retention and download
   # without a GitHub login. Pairs with openipc-builder's
-  # efficient-link-nack-d17. Earlier images stay under
-  # efficient-link-nack-gs(2..15), efficient-link-genlock(-gs2) and
+  # efficient-link-nack-d18 (and d17). Earlier images stay under
+  # efficient-link-nack-gs(2..16), efficient-link-genlock(-gs2) and
   # feedback-repair-shadow, -turnaround, -listen.
   release-feedback-repair:
-    name: Release efficient-link-nack-gs16 (on its branch)
+    name: Release efficient-link-nack-gs17 (on its branch)
     runs-on: ubuntu-latest
     needs: [buildroot]
     if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/claude/wifi-fpv-link-architecture-1bms9l'
@@ -163,22 +163,21 @@ jobs:
         with:
           path: artifacts/
 
-      - name: Create/Update efficient-link-nack-gs16 Release
+      - name: Create/Update efficient-link-nack-gs17 Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: efficient-link-nack-gs16
+          tag_name: efficient-link-nack-gs17
           body: |
-            Efficient-link GS image gs16 (mabur d3b3bdad, devourer a9a54fe):
-            the GS menu's Camera and Settings tabs, raw recordings that
-            really write their .osd/.srt/.link.srt and split at arm/disarm,
-            MCS3/80 FEC 0.5/0.25, the new link controls on (edge_per fade
-            rule, residual multi-rung drop, penalty fix, faster climb back),
-            and the 8812EU 10 MHz MAC-clock fix. First boot WIPES
-            /config/maburgs.toml and maburplay.toml to the new defaults and
-            clears the menu's choice, keep-config or not (old copies in
-            /config/old/; wifi.toml untouched). RC_VERSION 17: a flag day,
-            pair ONLY with
-            notsudogood/openipc-builder's efficient-link-nack-d17.
+            Efficient-link GS image gs17 (mabur c60b1621, devourer a9a54fe):
+            gs16 plus hop.fade_keeps_rung: a channel-hop order placed
+            while the signal is weak or fading keeps the current rung
+            instead of jumping back to the pre-trouble one (flight 0009:
+            twice to MCS4/40 mid-fade, starved at once). No wire change:
+            pairs with openipc-builder efficient-link-nack-d17 and d18
+            (RC_VERSION 17; never with Gilang's firmware). The bundle
+            changed, so first boot refreshes /config/maburgs.toml once
+            (old copy in /config/old/, the menu's choice cleared: Hop is
+            back on its default).
             Commit: ${{ github.sha }}
           files: artifacts/**/*
           prerelease: true

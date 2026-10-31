@@ -118,7 +118,11 @@
 # layout: never pair across the two). The bundles changed, so S00config
 # refreshes /config's maburgs.toml / maburplay.toml once (old copies in
 # /config/old/, the menu's choice cleared).
-MABUR_VERSION = d3b3bdad21350e0435269e9cce8a95c10bbb3fb3
+# c60b1621 (2026-10-31, gs17): + hop.fade_keeps_rung: a hop order whose
+# verdict reads weak or fading keeps the current rung instead of raising it
+# to the pre-onset ref_rung (flight 0009: twice to MCS4/40 mid-fade). Drone
+# side of the same commit (d18): radio resting at 20 MHz. No wire change.
+MABUR_VERSION = c60b1621dfd8693f93dde875a599b5964719e50e
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
