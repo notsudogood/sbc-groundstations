@@ -124,7 +124,10 @@
 # side of the same commit (d18): radio resting at 20 MHz. No wire change.
 # 36515ba5 (2026-10-31, gs17): + dvr.split_at_arm off by default: a d18
 # drone keeps its frame rate in low power, so one recording is one file.
-MABUR_VERSION = 36515ba5bae9bd461f3b3fca4ca29583fe078d84
+# 5cd3c79b (2026-10-31, gs17): + the recording's link detail moves from
+# record-NNNN.link.srt to a styled record-NNNN.ass (walksnail-osd-tool took
+# the .link.srt as its SRT and drew nothing).
+MABUR_VERSION = 5cd3c79bc3b51c1595c3c5ee8028b1a9ea4b1403
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
