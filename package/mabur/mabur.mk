@@ -135,7 +135,13 @@
 # disarmed, progress on screen), the Channel tab's Scan button and
 # red/yellow/green bars, the Playback tab, one folder per recording
 # (dvr.folders), and the Camera tab's outcome shown once per request.
-MABUR_VERSION = 9821c8175cf2f6c4b646181a1087945809bfcfdc
+# 198358a0 (2026-11-01, gs19): playback fixes from the operator's video --
+# a full decoder no longer drops a recording's frame (the green picture),
+# the menu clears the Playback tab's help strip, and a recording that spans
+# a drone restart keeps its real length (new file from the restart; old
+# files play over the jump instead of stalling ~71 min). Plus a log line of
+# decoder errors per playback. No wire or bundle change.
+MABUR_VERSION = 198358a0cb5edcc35aa70dd363d9e5fc3e582e3e
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
