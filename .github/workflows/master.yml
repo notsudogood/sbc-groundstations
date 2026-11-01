@@ -176,14 +176,16 @@ jobs:
         with:
           tag_name: efficient-link-nack-gs19
           body: |
-            Efficient-link GS image gs19 (mabur 198358a0, devourer 464e8a4):
+            Efficient-link GS image gs19 (mabur 65cacc31, devourer 464e8a4):
             gs18 plus playback fixes from the operator's video. A full
             decoder no longer drops a recording's frame during playback
             (the picture went green for ~15 s and healed at the next
             refresh); the Playback tab's help strip no longer stays on
             screen; a recording that spans a drone restart continues in a
             new file, and older such files list and play at their real
-            length instead of ~71 min. Each playback logs its decoder
+            length instead of ~71 min. While a recording plays, the live
+            OSD (flight grid and link bar) is hidden and only the
+            "Playing" banner shows. Each playback logs its decoder
             errors. No wire or bundle change: pairs with
             openipc-builder efficient-link-nack-d18 and d19, and the
             first boot keeps /config as it is.

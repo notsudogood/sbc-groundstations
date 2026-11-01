@@ -141,7 +141,10 @@
 # a drone restart keeps its real length (new file from the restart; old
 # files play over the jump instead of stalling ~71 min). Plus a log line of
 # decoder errors per playback. No wire or bundle change.
-MABUR_VERSION = 198358a0cb5edcc35aa70dd363d9e5fc3e582e3e
+# 65cacc31 (2026-11-01, gs19): + the live OSD (flight grid and link bar)
+# leaves the screen while a recording plays; only the "Playing" banner
+# stays. The burned DVR keeps it.
+MABUR_VERSION = 65cacc3174d6bbe23462440cfa5d4644196d0bda
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
