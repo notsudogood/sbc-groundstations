@@ -26,7 +26,11 @@
 # 10 MHz trip the receive cards read path-B RSSI -110 and SNR ~0 for the rest
 # of the flight (0008); that the clock caused it is inferred, not yet
 # bench-confirmed.
-DEVOURER_VERSION = a9a54fe1769d9994e269d9a2a7151e6687de5517
+# 464e8a4 (2026-11-01, gs18): + 925530d's runtime wide-TX IGI floor setter
+# (drone-only; the GS sends only 20 MHz frames, so nothing changes here) and,
+# with radio.spur_ext (off by default), a CSI-mask weight on the upper 80 MHz
+# blocks' second spike. Untested on air.
+DEVOURER_VERSION = 464e8a405fc906fccb558d09dc5e1e4764e91069
 DEVOURER_SITE = https://github.com/notsudogood/devourer.git
 DEVOURER_SITE_METHOD = git
 DEVOURER_LICENSE = GPL-2.0

@@ -130,7 +130,12 @@
 # 2fb591eb (2026-10-31, gs17): + the Camera tab's fifth preset, "Crop 60"
 # (1080p60 from the drone camera's unbinned crop; a d18 drone offers it).
 # The drone-side IGI floor learner in the same range is drone-only.
-MABUR_VERSION = 2fb591ebf74bb4dfd415050d267bd2189180f1d4
+# 9821c817 (2026-11-01, gs18): + first-boot floor calibration (link.floor_cal:
+# a d19 drone that has not proven 40/80 MHz is tested on the ground while
+# disarmed, progress on screen), the Channel tab's Scan button and
+# red/yellow/green bars, the Playback tab, one folder per recording
+# (dvr.folders), and the Camera tab's outcome shown once per request.
+MABUR_VERSION = 9821c8175cf2f6c4b646181a1087945809bfcfdc
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO

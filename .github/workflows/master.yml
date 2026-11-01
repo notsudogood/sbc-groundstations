@@ -149,7 +149,7 @@ jobs:
   # efficient-link-nack-gs(2..16), efficient-link-genlock(-gs2) and
   # feedback-repair-shadow, -turnaround, -listen.
   release-feedback-repair:
-    name: Release efficient-link-nack-gs17 (on its branch)
+    name: Release efficient-link-nack-gs18 (on its branch)
     runs-on: ubuntu-latest
     needs: [buildroot]
     if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/claude/wifi-fpv-link-architecture-1bms9l'
@@ -163,28 +163,26 @@ jobs:
         with:
           path: artifacts/
 
-      - name: Create/Update efficient-link-nack-gs17 Release
+      - name: Create/Update efficient-link-nack-gs18 Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: efficient-link-nack-gs17
+          tag_name: efficient-link-nack-gs18
           body: |
-            Efficient-link GS image gs17 (mabur 2fb591eb, devourer a9a54fe):
-            gs16 plus hop.fade_keeps_rung: a channel-hop order placed
-            while the signal is weak or fading keeps the current rung
-            instead of jumping back to the pre-trouble one (flight 0009:
-            twice to MCS4/40 mid-fade, starved at once), and recordings
-            no longer split at arm/disarm (dvr.split_at_arm off: a d18
-            drone keeps 60 fps in low power), and the link detail
-            subtitles are record-NNNN.ass (walksnail-osd-tool ignores it;
-            VLC/mpv/ffmpeg read it), and the Camera tab has a fifth
-            preset, Crop 60 (1080p60 from the drone camera's unbinned
-            crop, 1.4x zoom; a d18 drone with waybeam's driver offers
-            it). No wire change:
-            pairs with openipc-builder efficient-link-nack-d17 and d18
-            (RC_VERSION 17; never with Gilang's firmware). The bundle
-            changed, so first boot refreshes /config/maburgs.toml once
-            (old copy in /config/old/, the menu's choice cleared: Hop is
-            back on its default).
+            Efficient-link GS image gs18 (mabur 9821c817, devourer 464e8a4):
+            gs17 plus first-boot floor calibration (a d19 drone that has
+            not yet proven 40/80 MHz is tested on the ground while
+            disarmed, with its progress on screen; link.floor_cal), a
+            Scan button on the menu's Channel tab with red/yellow/green
+            bars per channel (needs the second card), a Playback tab that
+            plays recordings on the goggles while the drone is disarmed,
+            one folder per recording (record-NNNN/ holds the .mp4, .osd,
+            .srt and .ass; dvr.folders), and the Camera tab's outcome
+            shown once per request. No wire change: pairs with
+            openipc-builder efficient-link-nack-d18 and d19 (the first-boot
+            calibration needs d19; never with Gilang's firmware). The
+            bundle changed, so first boot refreshes /config/maburgs.toml
+            and /config/maburplay.toml once (old copies in /config/old/,
+            the menu's choice cleared: Hop is back on its default).
             Commit: ${{ github.sha }}
           files: artifacts/**/*
           prerelease: true
