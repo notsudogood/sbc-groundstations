@@ -155,7 +155,13 @@
 # restarts the loss run; an entry outlives the GS leaving the session.
 # Flights 0019/0020: 17-18 s without a picture on MCS0/20 and no 10 MHz
 # order until frames came back by themselves. New `narrow10` stats block.
-MABUR_VERSION = f2bee409a91f6b0af2a912bf2ea415d8327816ec
+# 88db585d (2026-11-03, gs22): + display.phase_actuator = "display" (off by
+# default): the phase lock trims this GS's HDMI pixel clock (RK3566 HPLL,
+# fraction register only after one point move at the modeset) instead of
+# the drone camera's rate -- for camera modes that cannot run faster than
+# their nominal rate (Crop 60). Bounded by display.trim_max_ppm (1000),
+# 1920x1080@60 only, falls back to the camera steer with the reason logged.
+MABUR_VERSION = 88db585d3b97567d686e91b9ba8e8c42e296783a
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
