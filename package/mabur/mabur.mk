@@ -144,12 +144,18 @@
 # 65cacc31 (2026-11-01, gs19): + the live OSD (flight grid and link bar)
 # leaves the screen while a recording plays; only the "Playing" banner
 # stays. The burned DVR keeps it.
-# 31fb0250 (2026-11-03, gs20): + link.down_mcs_cap: a loss-driven step
+# 31fb0250 (2026-11-03, built as gs20, cancelled mid-build): + link.down_mcs_cap: a loss-driven step
 # down never lands on a higher MCS, so MCS3/80 steps to MCS3/40 and MCS3/40
 # to MCS3/20, skipping the MCS4/40 and MCS4/20 rungs (climbs keep them).
 # Flights 0019-0021: 18 of 18 steps MCS3/80 -> MCS4/40 failed again within
 # 1 s. On in code too, so the kept /config runs it. No wire change.
-MABUR_VERSION = 31fb025026da8c7f68a5a05e63ce47bf75f343d5
+# f2bee409 (2026-11-03, gs21 = the cancelled gs20 + this): + link.narrow10.silence:
+# a video stop on MCS0/20 (no video for 0.4 s) orders 10 MHz at once, while
+# the session's RCFs can still carry the order; a no-video window no longer
+# restarts the loss run; an entry outlives the GS leaving the session.
+# Flights 0019/0020: 17-18 s without a picture on MCS0/20 and no 10 MHz
+# order until frames came back by themselves. New `narrow10` stats block.
+MABUR_VERSION = f2bee409a91f6b0af2a912bf2ea415d8327816ec
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
