@@ -160,7 +160,7 @@ jobs:
   # efficient-link-nack-gs(2..16), efficient-link-genlock(-gs2) and
   # feedback-repair-shadow, -turnaround, -listen.
   release-feedback-repair:
-    name: Release efficient-link-nack-gs22 (on its branch)
+    name: Release efficient-link-nack-gs23 (on its branch)
     runs-on: ubuntu-latest
     needs: [buildroot]
     if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/claude/wifi-fpv-link-architecture-1bms9l'
@@ -174,30 +174,27 @@ jobs:
         with:
           path: artifacts/
 
-      - name: Create/Update efficient-link-nack-gs22 Release
+      - name: Create/Update efficient-link-nack-gs23 Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: efficient-link-nack-gs22
+          tag_name: efficient-link-nack-gs23
           body: |
-            Efficient-link GS image gs22 (mabur 88db585d, devourer 464e8a4):
-            gs21 plus an opt-in display-side phase lock. With
-            display.phase_actuator = "display" in /config/maburplay.toml the
-            lock trims this GS's HDMI clock so the panel follows the camera,
-            instead of steering the camera to the panel; it is for camera
-            modes that cannot run faster than their nominal rate (the Crop 60
-            preset). RK3566 at 1920x1080@60 only, bounded by
-            display.trim_max_ppm (1000); anything else falls back to the
-            camera steer and logs why. The display re-syncs once when it
-            engages. Unflown; sink tolerance varies by display (Avatar
-            Goggles X blanked under trimming at 100 Hz). Off by default.
-            gs21's link changes are included: a step down on loss never
-            lands on a higher MCS, and a video stop on MCS0/20 switches to
-            10 MHz. No wire change: pairs with openipc-builder
-            efficient-link-nack-d20 and d21. Both GS bundles changed against
-            gs19, so the first boot resets /config/maburgs.toml and
-            /config/maburplay.toml to the new defaults (edited copies go to
-            /config/old/) and clears the menu's saved hop/channel/bandwidth
-            choice. From gs21, only maburplay.toml is reset.
+            Efficient-link GS image gs23 (mabur f4c9abdc, devourer 464e8a4):
+            gs22 plus a second point for the display-side phase lock. With
+            display.phase_actuator = "display" the lock trims this GS's HDMI
+            clock so the panel follows the camera; gs23 also engages when the
+            sink gets 1920x1080@60 with the HDMI PLL at half rate (74.25 MHz,
+            a 4:2:0 link, likely), which HDZero goggles do and gs22 refused.
+            The half-rate point is unflown and untested on hardware; sink
+            tolerance varies by display. Bounded by display.trim_max_ppm
+            (1000); anything else falls back to the camera steer and logs why.
+            Off by default. gs21's link changes are included. No wire change:
+            pairs with openipc-builder efficient-link-nack-d20 and d21. From
+            gs22 no config is reset (the bundles are unchanged). Against
+            gs19, both GS bundles changed: the first boot resets
+            /config/maburgs.toml and /config/maburplay.toml (edited copies go
+            to /config/old/) and clears the menu's saved hop/channel/bandwidth
+            choice; from gs21, only maburplay.toml is reset.
             Commit: ${{ github.sha }}
           files: artifacts/**/*
           prerelease: true
