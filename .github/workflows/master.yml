@@ -157,7 +157,7 @@ jobs:
   # efficient-link-nack-gs(2..16), efficient-link-genlock(-gs2) and
   # feedback-repair-shadow, -turnaround, -listen.
   release-feedback-repair:
-    name: Release efficient-link-nack-gs19 (on its branch)
+    name: Release efficient-link-nack-gs20 (on its branch)
     runs-on: ubuntu-latest
     needs: [buildroot]
     if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/claude/wifi-fpv-link-architecture-1bms9l'
@@ -171,24 +171,22 @@ jobs:
         with:
           path: artifacts/
 
-      - name: Create/Update efficient-link-nack-gs19 Release
+      - name: Create/Update efficient-link-nack-gs20 Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: efficient-link-nack-gs19
+          tag_name: efficient-link-nack-gs20
           body: |
-            Efficient-link GS image gs19 (mabur 65cacc31, devourer 464e8a4):
-            gs18 plus playback fixes from the operator's video. A full
-            decoder no longer drops a recording's frame during playback
-            (the picture went green for ~15 s and healed at the next
-            refresh); the Playback tab's help strip no longer stays on
-            screen; a recording that spans a drone restart continues in a
-            new file, and older such files list and play at their real
-            length instead of ~71 min. While a recording plays, the live
-            OSD (flight grid and link bar) is hidden and only the
-            "Playing" banner shows. Each playback logs its decoder
-            errors. No wire or bundle change: pairs with
-            openipc-builder efficient-link-nack-d18 and d19, and the
-            first boot keeps /config as it is.
+            Efficient-link GS image gs20 (mabur 31fb0250, devourer 464e8a4):
+            gs19 plus one link change. A step down on loss never lands on
+            a higher MCS: MCS3/80 steps to MCS3/40 and MCS3/40 to MCS3/20,
+            skipping MCS4/40 and MCS4/20, which climbs still use. In
+            flights 0019-0021 every step MCS3/80 -> MCS4/40 (18 of 18)
+            failed again within 1 s and began all six large glitches.
+            Unflown; on in code and bundle (link.down_mcs_cap = false
+            turns it off), logged as "mcs_cap skipped=N" on the ctl line.
+            No wire change: pairs with openipc-builder
+            efficient-link-nack-d20 and d21, and the first boot keeps
+            /config as it is.
             Commit: ${{ github.sha }}
           files: artifacts/**/*
           prerelease: true

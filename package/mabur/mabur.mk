@@ -144,7 +144,12 @@
 # 65cacc31 (2026-11-01, gs19): + the live OSD (flight grid and link bar)
 # leaves the screen while a recording plays; only the "Playing" banner
 # stays. The burned DVR keeps it.
-MABUR_VERSION = 65cacc3174d6bbe23462440cfa5d4644196d0bda
+# 31fb0250 (2026-11-03, gs20): + link.down_mcs_cap: a loss-driven step
+# down never lands on a higher MCS, so MCS3/80 steps to MCS3/40 and MCS3/40
+# to MCS3/20, skipping the MCS4/40 and MCS4/20 rungs (climbs keep them).
+# Flights 0019-0021: 18 of 18 steps MCS3/80 -> MCS4/40 failed again within
+# 1 s. On in code too, so the kept /config runs it. No wire change.
+MABUR_VERSION = 31fb025026da8c7f68a5a05e63ce47bf75f343d5
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
