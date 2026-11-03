@@ -188,8 +188,10 @@ jobs:
             Unflown; on in code and bundle (link.down_mcs_cap = false
             turns it off), logged as "mcs_cap skipped=N" on the ctl line.
             No wire change: pairs with openipc-builder
-            efficient-link-nack-d20 and d21, and the first boot keeps
-            /config as it is.
+            efficient-link-nack-d20 and d21. The GS bundle changed, so the
+            first boot resets /config/maburgs.toml to the new default (an
+            edited copy goes to /config/old/) and clears the menu's saved
+            hop/channel/bandwidth choice; /config/maburplay.toml is kept.
             Commit: ${{ github.sha }}
           files: artifacts/**/*
           prerelease: true
