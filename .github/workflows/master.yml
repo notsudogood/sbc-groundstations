@@ -179,22 +179,27 @@ jobs:
         with:
           tag_name: efficient-link-nack-gs23
           body: |
-            Efficient-link GS image gs23 (mabur f4c9abdc, devourer 464e8a4):
-            gs22 plus a second point for the display-side phase lock. With
-            display.phase_actuator = "display" the lock trims this GS's HDMI
-            clock so the panel follows the camera; gs23 also engages when the
-            sink gets 1920x1080@60 with the HDMI PLL at half rate (74.25 MHz,
-            a 4:2:0 link, likely), which HDZero goggles do and gs22 refused.
-            The half-rate point is unflown and untested on hardware; sink
-            tolerance varies by display. Bounded by display.trim_max_ppm
-            (1000); anything else falls back to the camera steer and logs why.
-            Off by default. gs21's link changes are included. No wire change:
-            pairs with openipc-builder efficient-link-nack-d20 and d21. From
-            gs22 no config is reset (the bundles are unchanged). Against
-            gs19, both GS bundles changed: the first boot resets
-            /config/maburgs.toml and /config/maburplay.toml (edited copies go
-            to /config/old/) and clears the menu's saved hop/channel/bandwidth
-            choice; from gs21, only maburplay.toml is reset.
+            Efficient-link GS image gs23 (mabur b9780514, devourer 464e8a4):
+            gs22 with the display-side phase lock on by default. The lock
+            trims this GS's HDMI clock so the screen follows the drone
+            camera (works with Crop 60, which the camera steer cannot reach),
+            bounded by display.trim_max_ppm (2000). At start and on every
+            replug the GS names the attached screen or goggles from its EDID
+            in the log ("display sink:") and tries the trim; where it cannot
+            run (not an RK3566, a 100 Hz or 59.94 Hz mode, an unknown clock
+            setting, or a display listed in display.trim_skip_sinks) the
+            camera steer runs instead and the log says why. New: a second
+            trim point for displays fed at half the pixel clock (74.25 MHz,
+            a 4:2:0 link, likely; HDZero goggles, which gs22 refused), and
+            720p modes. Unflown; the half-rate point is untested on hardware
+            and most displays have never run the trim (a blank is invisible
+            to the GS: list that display in trim_skip_sinks). gs21's link
+            changes are included. No wire change: pairs with
+            openipc-builder efficient-link-nack-d20 and d21. The player
+            bundle changed, so the first boot resets /config/maburplay.toml
+            to the new defaults (an edited copy goes to /config/old/).
+            Against gs19 it also resets /config/maburgs.toml and clears the
+            menu's saved hop/channel/bandwidth choice.
             Commit: ${{ github.sha }}
           files: artifacts/**/*
           prerelease: true

@@ -161,11 +161,15 @@
 # the drone camera's rate -- for camera modes that cannot run faster than
 # their nominal rate (Crop 60). Bounded by display.trim_max_ppm (1000),
 # 1920x1080@60 only, falls back to the camera steer with the reason logged.
-# f4c9abdc (2026-11-03, gs23): + the display trim also engages with HPLL at
+# b9780514 (2026-11-03, gs23): + the display trim also engages with HPLL at
 # half the 1080p60 clock, 74.25 MHz (refdiv 2; a 4:2:0 link, likely), at a
-# second point (fbdiv 74 + 0.25 over postdivs 6x4). HDZero goggles read that
-# setting and gs22 refused the trim there. The new point is unflown.
-MABUR_VERSION = f4c9abdcd1c26603b847f0d9f20a911e0963f78b
+# second point (fbdiv 74 + 0.25 over postdivs 6x4); HDZero goggles read that
+# setting and gs22 refused the trim there. The display actuator is now the
+# default (trim_max_ppm 2000); each attached display is named from its EDID
+# in the log ("display sink:") and display.trim_skip_sinks leaves listed ones
+# on the camera steer; the trim is re-checked after the first modeset; 720p
+# modes trim too. Player bundle changed: maburplay.toml resets once. Unflown.
+MABUR_VERSION = b9780514556aef25140aa46522649bfc0da0a5c5
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
