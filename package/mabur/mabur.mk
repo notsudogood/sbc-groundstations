@@ -169,7 +169,12 @@
 # in the log ("display sink:") and display.trim_skip_sinks leaves listed ones
 # on the camera steer; the trim is re-checked after the first modeset; 720p
 # modes trim too. Player bundle changed: maburplay.toml resets once. Unflown.
-MABUR_VERSION = b9780514556aef25140aa46522649bfc0da0a5c5
+# 037c91a3 (2026-11-04, gs24): the 10 MHz video-stop rule waits for the
+# session's first video (it sent most power-ups to 10 MHz: the drone links
+# ~10 s before its camera sends); its SNR is read in dB, not raw half-dB;
+# after a video-stop entry the climb back needs 15 dB at 10 MHz instead of
+# the SNR at the stop + 6. No config change. Unflown.
+MABUR_VERSION = 037c91a36d57cc6a3975c8d62334f5da46436c8c
 MABUR_SITE = https://github.com/notsudogood/mabur.git
 MABUR_SITE_METHOD = git
 MABUR_INSTALL_STAGING = NO
