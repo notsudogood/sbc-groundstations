@@ -75,6 +75,7 @@ jobs:
       # hit, so a fixed key freezes the cache at its first save. Restore
       # the newest one by prefix and save a fresh one after every build.
       - name: Restore ccache
+        id: restore_ccache
         uses: actions/cache/restore@v5
         with:
           path: /tmp/ccache
@@ -83,8 +84,10 @@ jobs:
             ${{ matrix.platform }}-ccache-
 
       - name: Build firmware
+        id: build
         working-directory: /mnt/workspace
         run: |
+          date +%s > "$RUNNER_TEMP/build_start"   # read by the ccache save gate
           export GIT_HASH=$(git rev-parse --short $GITHUB_SHA)
           export GIT_BRANCH=${GITHUB_REF_NAME}
           echo "GIT_HASH=${GIT_HASH}" >> $GITHUB_ENV
@@ -98,15 +101,69 @@ jobs:
           NAME=${{ matrix.platform }}
           DEFCONFIG=${NAME}_defconfig bash build.sh
 
+      # The repo's 10 GB cache quota holds about one set (a board's ccache
+      # archives to ~2.7 GB); every save beyond it makes GitHub delete the
+      # least recently used caches. A board whose save is skipped or fails
+      # while the others save is the one at risk: its only cache was last
+      # used at this run's restore, older than the others' fresh copies.
+      # gs24's first run, cancelled two minutes into its build, did exactly
+      # that: radxa and emax saved copies, runcam's tar failed (exit 1, files
+      # still changing under the dying build), and runcam's cache was the
+      # one deleted, so the next run built runcam cold (~5 h of the 6 h job
+      # limit). Hence the two steps below.
+
+      # A cancelled or timed-out build can leave compilers still writing
+      # into /tmp/ccache; stop them so the save does not read a moving tree.
+      - name: Stop leftover build processes
+        if: always()
+        run: |
+          if pkill -TERM -f /mnt/workspace/output; then
+            sleep 5
+            pkill -KILL -f /mnt/workspace/output || true
+            echo "stopped leftover build processes"
+          fi
+
       - name: ccache stats
         if: always()
         working-directory: /mnt/workspace
         run: BR_CACHE_DIR=/tmp/ccache output/${{ matrix.platform }}_defconfig/host/bin/ccache -s || true
 
-      # Save even when the build fails or is cancelled: a half-finished
-      # LLVM compile is still worth keeping for the next run.
-      - name: Save ccache
+      # Save after a successful build; after a failed, cancelled or timed-out
+      # one only when the copy holds something new: the restore found
+      # nothing (a cold compile, all the next run would have), or the build
+      # ran 30 min or more (a timeout, or a late failure, whose board must
+      # not be the one left without a fresh copy). A build stopped in its
+      # first minutes adds nothing to the cache it restored, so its copy
+      # would only push another board's cache out. The restore's own outcome
+      # must be success: one cancelled mid-download also reads as "found
+      # nothing", and saving that partial tree would shadow the good cache.
+      - name: Decide whether to save ccache
+        id: ccache_gate
         if: always()
+        env:
+          BUILD_OUTCOME: ${{ steps.build.outcome }}
+          RESTORE_OUTCOME: ${{ steps.restore_ccache.outcome }}
+          RESTORED_KEY: ${{ steps.restore_ccache.outputs.cache-matched-key }}
+        run: |
+          ran=0
+          if [ -f "$RUNNER_TEMP/build_start" ]; then
+            ran=$(( $(date +%s) - $(cat "$RUNNER_TEMP/build_start") ))
+          fi
+          if [ "$BUILD_OUTCOME" = success ]; then
+            save=true; why="build succeeded"
+          elif [ "$RESTORE_OUTCOME" = success ] && [ -z "$RESTORED_KEY" ]; then
+            save=true; why="cold start, keeping the partial compile"
+          elif [ "$ran" -ge 1800 ]; then
+            save=true; why="build ran $((ran / 60)) min"
+          else
+            save=false
+            why="build $BUILD_OUTCOME after $((ran / 60)) min on restored ${RESTORED_KEY:-nothing (restore $RESTORE_OUTCOME)}"
+          fi
+          echo "ccache save: $save ($why)"
+          echo "save=$save" >> "$GITHUB_OUTPUT"
+
+      - name: Save ccache
+        if: always() && steps.ccache_gate.outputs.save == 'true'
         uses: actions/cache/save@v5
         with:
           path: /tmp/ccache
